@@ -1,4 +1,4 @@
-import os
+import os, sys
 from numpy import *
 from __version__ import __version__
 import time
@@ -29,10 +29,10 @@ if not gotNetCDF:
         gotNetCDF = False
 
 if gotNetCDF:
-    print 'Using %s interface for IO' % NetCDFInterface
+    sys.stderr.write('Using %s interface for IO \n' % NetCDFInterface)
 else:
-    if not Lite: print '\n ++++ CliMT: WARNING: NetCDF interface ' \
-          +'could not be loaded, so no file input or output !\n' 
+    if not Lite: sys.stderr.write('\n ++++ CliMT: WARNING: NetCDF interface ' \
+          +'could not be loaded, so no file input or output !\n')
 
 from state import KnownFields
 

@@ -1,9 +1,7 @@
 #!/usr/bin/env python
+import sys
 
-if 'climt_lite' in __file__:
-    Lite = True
-else:
-    Lite = False
+Lite = 'climt_lite' in __file__
 
 try:
     try:    import matplotlib.pylab as pylab
@@ -18,8 +16,8 @@ try:
     pylab.ion() 
     gotMatplotlib = True
 except:
-    if not Lite: print '\n ++++ CliMT: WARNING: matplotlib.pylab ' \
-       +'could not be loaded, so no runtime monitoring !\n' 
+    if not Lite: sys.stderr.write('\n ++++ CliMT: WARNING: matplotlib.pylab ' \
+       +'could not be loaded, so no runtime monitoring !\n')
     gotMatplotlib = False
 
 from numpy import *
