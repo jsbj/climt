@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 
-if 'climt_lite' in __file__:
-    Lite = True
-else:
-    Lite = False
+Lite = 'climt_lite' in __file__:
 
 try:
     try:    import matplotlib.pylab as pylab

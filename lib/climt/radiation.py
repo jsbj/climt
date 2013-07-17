@@ -14,7 +14,7 @@ class radiation(Component):
       
       where <args> are the following OPTIONAL arguments:
       Name   Dims  Meaning              Units     Default   Notes
-      scheme    0  Radiative scheme     (string)    'cam3'  Choices are: 'cam3', 'ccm3', 'chou', 'greygas' 
+      scheme    0  Radiative scheme     (string)    'cam3'  Choices are: 'cam3', 'ccm3', 'chou', 'greygas', 'rrtm' 
       do_sw     0  Shortwave switch     (integer)       1   1 / 0 => do / do not compute SW        
       do_lw     0  Longwave switch      (integer)       1   1 / 0 => do / do not compute LW       
       scon      0  Solar constant       W m-2        1367.
