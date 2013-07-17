@@ -3,10 +3,7 @@ from numpy import *
 from __version__ import __version__
 import time
 
-if 'climt_lite' in __file__:
-    Lite = True
-else:
-    Lite = False
+Lite = 'climt_lite' in __file__
 
 try:
     from netCDF4 import Dataset as open_file
