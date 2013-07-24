@@ -1,177 +1,88 @@
-subroutine driver(  &
-     km,   &
-     jm,   &
-     im,   &
-     idosw,   &
-     idolw,   &
-     pmid,   &
-     dp,   &
-     ps,   &
-     t,   &
-     tg,   &
-     q,   & 
-     o3mmr,   &
-     cldf,   &
-     clwp,   &
-     ciwp,   &
-     in_cld,   &
-     aldif,   &
-     aldir,   &
-     asdif,   &
-     asdir,   &
-     zen,   &
-     scon,   &
-     flus,   &
-     r_liq,   &
-     r_ice,   &
-     co2vmr,   &
-     n2ovmr,   &
-     ch4vmr,   &
-     f11vmr,   &
-     f12vmr,   &
-     gravit,   &
-     cpair,   &
-     epsilo,   &
-     stebol,   &
-     dt,   &  
-     tinc,   &
-     tdot,   &
-     srfflx,   &
-     qrs,   &
-     qrl,   &
-     swflx_out,   &
-     lwflx_out,   &
-     sw_cf_toa,   &
-     sw_cf_srf,   &
-     lw_cf_toa,   &
-     lw_cf_srf, &
-     lw_toa,  &
-     lw_srf,  &
-     sw_toa,  &
-     sw_srf & 
-     )
-
+! see _rrtm_radiation for the python that prepares these arguments...
+subroutine driver
+    (ncol, nlay, icld, idrv, play, plev, tlay, tlev, tsfc, h2ovmr, o3vmr, co2vmr, ch4vmr, n2ovmr, &
+    o2vmr, cfc11vmr, cfc12vmr, cfc22vmr, ccl4vmr, aldif, aldir, asdif, asdir, emis, adjes, coszen, scon, &
+    inflgsw, iceflgsw, liqflgsw, cldfmcl_sw, taucmcl_sw, ssacmcl_sw, asmcmcl_sw, fsfcmcl_sw, ciwpmcl_sw, clwpmcl_sw, &
+    reicmcl_sw, relqmcl_sw, inflglw, iceflgslw, liqflglw, cldfmcl_lw, ciwpmcl_lw, clwpmcl_lw, reicmcl_lw, &
+    relqmcl_lw, taucmcl_lw, tauaer_sw, ssaaer_sw, asmaer_sw, ecaer_sw, tauaer_lw, swuflx, swdflx, swhr, swuflxc, &
+    swdflxc, swhrc, uflx, dflx, hr, uflxc, dflxc, hrc)
+! Modules
+    use rrtmg_lw_rad, only: rrtmg_lw
+    use rrtmg_sw_rad, only: rrtmg_sw
+    use parkind, only : im => kind_im, rb => kind_rb
+    use parrrtm, only : nbndlw, ngptlw, maxxsec, mxmol
+    use parrrsw, only : nbndsw, ngptsw, naerec, nstr, nmol, mxmol, jpband, jpb1, jpb2
+    
 ! Input
-  integer, intent(in) :: km,jm,im,idosw,idolw,in_cld
-  real*8, intent(in) :: aldif(jm,im)
-  real*8, intent(in) :: aldir(jm,im)
-  real*8, intent(in) :: asdif(jm,im)
-  real*8, intent(in) :: asdir(jm,im)
-  real*8, intent(in) :: zen(jm,im)
-  real*8, intent(in) :: scon(jm,im)
-  real*8, intent(in) :: flus(jm,im)
-  real*8, intent(in) :: cldf(km,jm,im)
-  real*8, intent(in) :: clwp(km,jm,im)
-  real*8, intent(in) :: ciwp(km,jm,im)
-  real*8, intent(in) :: o3mmr(km,jm,im)
-  real*8, intent(in) :: r_liq(km,jm,im)
-  real*8, intent(in) :: r_ice(km,jm,im)
-  real*8, intent(in) :: pmid(km,jm,im)
-  real*8, intent(in) :: dp(km,jm,im)
-  real*8, intent(in) :: ps(jm,im)
-  real*8, intent(in) :: q(km,jm,im)
-  real*8, intent(in) :: tg(jm,im)
-  real*8, intent(in) :: t(km,jm,im)
-  real*8, intent(in) :: co2vmr
-  real*8, intent(in) :: n2ovmr
-  real*8, intent(in) :: ch4vmr
-  real*8, intent(in) :: f11vmr
-  real*8, intent(in) :: f12vmr
-  real*8, intent(in) :: gravit
-  real*8, intent(in) :: cpair
-  real*8, intent(in) :: epsilo
-  real*8, intent(in) :: stebol
-  real*8, intent(in) :: dt
-!f2py intent(in,hide)  km,jm,im
+    integer(kind=im), intent(in) :: ncol
+    integer(kind=im), intent(in) :: nlay
+    integer(kind=im), intent(in) :: icld
+    integer(kind=im), intent(in) :: idrv
+    real(kind=rb), intent(in) :: play(ncol,nlay)
+    real(kind=rb), intent(in) :: plev(ncol,nlay+1)
+    real(kind=rb), intent(in) :: tlay(ncol,nlay)
+    real(kind=rb), intent(in) :: tlev(ncol,nlay+1)
+    real(kind=rb), intent(in) :: tsfc(ncol)
+    real(kind=rb), intent(in) :: h2ovmr(ncol,nlay)
+    real(kind=rb), intent(in) :: o3vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: co2vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: ch4vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: n2ovmr(ncol,nlay)
+    real(kind=rb), intent(in) :: o2vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: cfc11vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: cfc12vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: cfc22vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: ccl4vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: aldif(ncol)
+    real(kind=rb), intent(in) :: aldir(ncol)
+    real(kind=rb), intent(in) :: asdif(ncol)
+    real(kind=rb), intent(in) :: asdir(ncol)
+    real(kind=rb), intent(in) :: emis(ncol,nbndlw)
+    real(kind=rb), intent(in) :: adjes
+    real(kind=rb), intent(in) :: coszen(ncol)
+    real(kind=rb), intent(in) :: scon
+    integer(kind=im), intent(in) :: inflgsw
+    integer(kind=im), intent(in) :: iceflgsw
+    integer(kind=im), intent(in) :: liqflgsw
+    real(kind=rb), intent(in) :: cldfmcl_sw(ngptsw,ncol,nlay)
+    real(kind=rb), intent(in) :: taucmcl_sw(ngptsw,ncol,nlay)
+    real(kind=rb), intent(in) :: ssacmcl_sw(ngptsw,ncol,nlay)
+    real(kind=rb), intent(in) :: asmcmcl_sw(ngptsw,ncol,nlay)
+    real(kind=rb), intent(in) :: fsfcmcl_sw(ngptsw,ncol,nlay)
+    real(kind=rb), intent(in) :: ciwpmcl_sw(ngptsw,ncol,nlay)
+    real(kind=rb), intent(in) :: clwpmcl_sw(ngptsw,ncol,nlay)
+    real(kind=rb), intent(in) :: reicmcl_sw(ncol,nlay)
+    real(kind=rb), intent(in) :: relqmcl_sw(ncol,nlay)
+    integer(kind=im), intent(in) :: inflglw
+    integer(kind=im), intent(in) :: iceflgslw
+    integer(kind=im), intent(in) :: liqflglw
+    real(kind=rb), intent(in) :: cldfmcl_lw(ngptlw,ncol,nlay)
+    real(kind=rb), intent(in) :: ciwpmcl_lw(ngptlw,ncol,nlay)
+    real(kind=rb), intent(in) :: clwpmcl_lw(ngptlw,ncol,nlay)
+    real(kind=rb), intent(in) :: reicmcl_lw(ncol,nlay)
+    real(kind=rb), intent(in) :: relqmcl_lw(ncol,nlay)
+    real(kind=rb), intent(in) :: taucmcl_lw(ngptlw,ncol,nlay)
+    real(kind=rb), intent(in) :: tauaer_sw(ncol,nlay,nbndsw)
+    real(kind=rb), intent(in) :: ssaaer_sw(ncol,nlay,nbndsw)
+    real(kind=rb), intent(in) :: asmaer_sw(ncol,nlay,nbndsw)
+    real(kind=rb), intent(in) :: ecaer_sw(ncol,nlay,nbndsw)    
+    real(kind=rb), intent(in) :: tauaer_lw(ncol,nlay,nbndlw)
+    ! Output
 
-! Output
-  real*8, intent(out) :: tinc(km,jm,im)
-  real*8, intent(out) :: tdot(km,jm,im)
-  real*8, intent(out) :: qrs(km,jm,im)
-  real*8, intent(out) :: qrl(km,jm,im)
-  real*8, intent(out) :: swflx_out(km,jm,im)
-  real*8, intent(out) :: lwflx_out(km,jm,im)
-  real*8, intent(out) :: sw_cf_toa(jm,im)
-  real*8, intent(out) :: sw_cf_srf(jm,im)
-  real*8, intent(out) :: lw_cf_toa(jm,im)
-  real*8, intent(out) :: lw_cf_srf(jm,im)
-  real*8, intent(out) :: lw_toa(jm,im)
-  real*8, intent(out) :: lw_srf(jm,im)
-  real*8, intent(out) :: sw_toa(jm,im)
-  real*8, intent(out) :: sw_srf(jm,im)
-  real*8, intent(out) :: srfflx(jm,im)
-
-! Local 
-  real*8 swflx(km+1)
-  real*8 lwflx(km+1)
-
-  do i=1,im
-     do j=1,jm
-        call crm(  &
-             aldif(j,i),  &
-             aldir(j,i),  &
-             asdif(j,i),  &
-             asdir(j,i),  &
-             zen(j,i),  &
-             scon(j,i),  &
-             flus(j,i),  &
-             cldf(1,j,i),  &
-             clwp(1,j,i),  &
-             ciwp(1,j,i),  &
-             in_cld, &
-             o3mmr(1,j,i),  &
-             r_liq(1,j,i),  &
-             r_ice(1,j,i),  &
-             pmid(1,j,i),  &
-             dp(1,j,i),  &
-             ps(j,i),  &
-             q(1,j,i),  & 
-             tg(j,i),  &
-             t(1,j,i),  &
-             co2vmr,  &
-             n2ovmr,  &
-             ch4vmr,  &
-             f11vmr,  &
-             f12vmr,  &
-             idosw,  &
-             idolw,  &
-             gravit,  &
-             cpair,  &
-             epsilo,  &
-             stebol,  &
-             qrs(1,j,i),  &
-             qrl(1,j,i),  &
-             swflx,  &
-             lwflx,  &
-             sw_cf_toa(j,i),  &
-             sw_cf_srf(j,i),  &
-             lw_cf_toa(j,i),  &
-             lw_cf_srf(j,i), &
-             lw_toa(j,i),  &
-             lw_srf(j,i),  &
-             sw_toa(j,i),  &
-             sw_srf(j,i) & 
-             )
-        swflx_out(:,j,i) = (swflx(1:km)+swflx(2:km+1))/2.
-        lwflx_out(:,j,i) = (lwflx(1:km)+lwflx(2:km+1))/2.
-        srfflx(j,i) = sw_srf(j,i) + lw_srf(j,i)
-     enddo
-  enddo
-
-  tdot   = qrs + qrl 
-  tinc   = 2.*dt*tdot
-  qrs = qrs * 86400.
-  qrl = qrl * 86400.
-  tdot = tdot * 86400.
-
+    ! SW
+    real(kind=rb), intent(out) :: swuflx(ncol,nlay+1)       ! Total sky shortwave upward flux (W/m2)
+    real(kind=rb), intent(out) :: swdflx(ncol,nlay+1)       ! Total sky shortwave downward flux (W/m2)
+    real(kind=rb), intent(out) :: swhr(ncol,nlay)         ! Total sky shortwave radiative heating rate (K/d)
+    real(kind=rb), intent(out) :: swuflxc(ncol,nlay+1)      ! Clear sky shortwave upward flux (W/m2)
+    real(kind=rb), intent(out) :: swdflxc(ncol,nlay+1)      ! Clear sky shortwave downward flux (W/m2)
+    real(kind=rb), intent(out) :: swhrc(ncol,nlay)        ! Clear sky shortwave radiative heating rate (K/d)
+                                                
+    ! LW
+    real(kind=rb), intent(out) :: uflx(ncol,nlay+1)         ! Total sky longwave upward flux (W/m2)
+    real(kind=rb), intent(out) :: dflx(ncol,nlay+1)         ! Total sky longwave downward flux (W/m2)
+    real(kind=rb), intent(out) :: hr(ncol,nlay)           ! Total sky longwave radiative heating rate (K/d)
+    real(kind=rb), intent(out) :: uflxc(ncol,nlay+1)        ! Clear sky longwave upward flux (W/m2)
+    real(kind=rb), intent(out) :: dflxc(ncol,nlay+1)        ! Clear sky longwave downward flux (W/m2)
+    real(kind=rb), intent(out) :: hrc(ncol,nlay)          ! Clear sky longwave radiative heating rate (K/d)
+                                                
 end subroutine driver
-
-!-------------------------------------------------------------
-integer function get_nlev()
-
-  integer get_km
-  external get_km
-
-  get_nlev = get_km()
-   
-end function get_nlev

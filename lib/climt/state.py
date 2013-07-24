@@ -61,7 +61,11 @@ KnownFields = {
     'UdotDyn':    ['dynamical zonal accn',       'm s-1 day-1', '3D'],
     'UdotTurb':   ['turbulent zonal drag',       'm s-1 day-', '3D'],
     'VdotDyn':    ['dynamical merid accn',       'm s-1 day-1', '3D'],
-    'VdotTurb':   ['turbulent merid drag',       'm s-1 day-1', '3D']
+    'VdotTurb':   ['turbulent merid drag',       'm s-1 day-1', '3D'],
+    # SHOULD THESE BE PARAMETERS?
+    'cloud_single_scattering_albedo': ['blah', 'blah', '3D'],
+    'cloud_asymmetry_parameter': ['blah', 'blah', '3D'],
+    'cloud_forward_scattering_fraction': ['blah', 'blah', '3D']
 }
 
 import os
@@ -130,6 +134,7 @@ class State:
         # Set fields' values to input or default
         Shape3D = self.Grid.Shape3D
         Shape2D = Shape3D[1:]
+        
         for Field in FieldNames:
             exec('Shape = Shape%s' % KnownFields[Field][2])
             if Field in kwargs:

@@ -20,44 +20,46 @@ else:
     Lite = False
 
 Extensions = [
-    {'name':'grid',
-     'dir':'src/grid'},
-    {'name':'timestep',
-     'dir':'src/timestep'},
-    {'name':'thermodyn',
-     'dir':'src/thermodyn'},
-    {'name':'emanuel_convection',
-     'dir':'src/convection/emanuel'},
-    {'name':'hard_adjustment',
-     'dir':'src/convection/hard'},
-    {'name':'sbm_convection',
-     'dir':'src/convection/hard'},
-    {'name':'axisymmetric_dynamics',
-     'dir':'src/dynamics/axisymmetric'},
-    {'name':'slab_ocean',
-     'dir':'src/ocean/slab_ocean'},
-    {'name':'ccm3_radiation',
-     'dir':'src/radiation/ccm3',
-     'cppflags':'-DSUN -DPLON=%i -DPLEV=%i -DPLEVR=%i' % (IM,KM,KM)},
-    {'name':'cam3_radiation',
-     'dir':'src/radiation/cam3',
-     'cppflags':'-DPLEV=%i' % KM,
-     'lib':['netcdf','netcdff'],
-     'libdir': [NC_LIB],
-     'incdir': [NC_INC]},
-    {'name':'chou_radiation',
-     'dir':'src/radiation/chou'},
-    {'name':'greygas_radiation',
-     'dir':'src/radiation/greygas'},
-    {'name':'ozone',
-     'dir':'src/radiation/ozone'},
-    {'name':'insolation',
-     'dir':'src/radiation/insolation'},
-    {'name':'ccm3_turbulence',
-     'dir':'src/turbulence/ccm3',
-     'cppflags':'-DPLON=%i -DPLEV=%i' % (IM,KM)},
-    {'name':'simple_turbulence',
-     'dir':'src/turbulence/simple'}
+    # {'name':'grid',
+    #  'dir':'src/grid'},
+    # {'name':'timestep',
+    #  'dir':'src/timestep'},
+    # {'name':'thermodyn',
+    #  'dir':'src/thermodyn'},
+    # {'name':'emanuel_convection',
+    #  'dir':'src/convection/emanuel'},
+    # {'name':'hard_adjustment',
+    #  'dir':'src/convection/hard'},
+    # {'name':'sbm_convection',
+    #  'dir':'src/convection/hard'},
+    # {'name':'axisymmetric_dynamics',
+    #  'dir':'src/dynamics/axisymmetric'},
+    # {'name':'slab_ocean',
+    #  'dir':'src/ocean/slab_ocean'},
+    # {'name':'ccm3_radiation',
+    #  'dir':'src/radiation/ccm3',
+    #  'cppflags':'-DSUN -DPLON=%i -DPLEV=%i -DPLEVR=%i' % (IM,KM,KM)},
+    # {'name':'cam3_radiation',
+    #  'dir':'src/radiation/cam3',
+    #  'cppflags':'-DPLEV=%i' % KM,
+    #  'lib':['netcdf','netcdff'],
+    #  'libdir': [NC_LIB],
+    #  'incdir': [NC_INC]},
+    # {'name':'chou_radiation',
+    #  'dir':'src/radiation/chou'},
+    # {'name':'greygas_radiation',
+    #  'dir':'src/radiation/greygas'},
+    # {'name':'ozone',
+    #  'dir':'src/radiation/ozone'},
+    # {'name':'insolation',
+    #  'dir':'src/radiation/insolation'},
+    # {'name':'ccm3_turbulence',
+    #  'dir':'src/turbulence/ccm3',
+    #  'cppflags':'-DPLON=%i -DPLEV=%i' % (IM,KM)},
+    # {'name':'simple_turbulence',
+    #  'dir':'src/turbulence/simple'},
+    {'name':'rrtm_radiation_fortran',
+     'dir':'src/radiation/rrtm'}
     ]
 
 # define extensions that will be built when the --lite option is used
@@ -168,27 +170,27 @@ def setupClimt():
     # Build all extensions
     for ext in Extensions: build_ext(**ext)
 
-    # Finish the setup
-    # note: setup() cannot copy directories, and falls over
-    # trying to copy the CVS directory in climt/lib/data
-    # workaround: make data list which specifically excludes CVS
-    os.chdir('lib/climt')
-    DataFiles = []
-    for File in glob.glob('data/*/*'):
-        if 'CVS' not in File:
-            DataFiles.append(File)
-    print DataFiles
-    os.chdir('../..')
-
-    setup(name         = "CliMT",
-          version      = open('Version').read()[:-1],
-          description  = "Climate modelling and diagnostics toolkit",
-          author       = "Rodrigo Caballero",
-          author_email = "rodrigo@misu.su.se",
-          url          = "http://people.su.se/~rcaba/climt",
-          packages    = ['climt'],
-          package_dir = {'':'lib'},
-          package_data = {'climt':['*.so']+DataFiles})
+    # # Finish the setup
+    # # note: setup() cannot copy directories, and falls over
+    # # trying to copy the CVS directory in climt/lib/data
+    # # workaround: make data list which specifically excludes CVS
+    # os.chdir('lib/climt')
+    # DataFiles = []
+    # for File in glob.glob('data/*/*'):
+    #     if 'CVS' not in File:
+    #         DataFiles.append(File)
+    # print DataFiles
+    # os.chdir('../..')
+    # 
+    # setup(name         = "CliMT",
+    #       version      = open('Version').read()[:-1],
+    #       description  = "Climate modelling and diagnostics toolkit",
+    #       author       = "Rodrigo Caballero",
+    #       author_email = "rodrigo@misu.su.se",
+    #       url          = "http://people.su.se/~rcaba/climt",
+    #       packages    = ['climt'],
+    #       package_dir = {'':'lib'},
+    #       package_data = {'climt':['*.so']+DataFiles})
 
 
 def setupClimtLite():
