@@ -146,34 +146,29 @@ def driver(*args):
             #         = 1 the optical depths (non-gray) due to water clouds are computed by a method
             #             based on the parameterization of water clouds due to Y.X. Hu and K. Stamnes,
             #             J. Clim., 6, 728-742 (1993).
-        'cldfmcl_sw': [[climt_inputs['cldf']]] * 112, # Cloud fraction; 112 is the "g-interval" for sw, ngptsw, set in parrrsw.f90
-        'taucmcl_sw': [[None]] * 112, # In-cloud optical depth [IS THIS ONE NEEDED GIVEN THE OTHERS?]
-        'ssacmcl_sw': [[climt_inputs['cloud_single_scattering_albedo']]] * 112, # In-cloud single scattering albedo
-        'asmcmcl_sw': [[climt_inputs['cloud_asymmetry_parameter']]] * 112, # In-cloud asymmetry parameter
-        'fsfcmcl_sw': [[climt_inputs['cloud_forward_scattering_fraction']]] * 112, # In-cloud forward scattering fraction (delta function pointing forward "forward peaked scattering")
-        'ciwpmcl_sw': [[climt_inputs['ciwp']]] * 112, # in-cloud ice water path (g/m2)
-        'clwpmcl_sw': [[climt_inputs['clwp']]] * 112, # in-cloud liquid water path (g/m2)
-        'reicmcl_sw': [climt_inputs['r_ice']], # Cloud ice particle effective size (microns)
-        'relqmcl_sw': [climt_inputs['r_liq']], # Cloud water drop effective radius (microns)
+        'tauc_sw': [[None]] * len(SW_BANDS), # In-cloud optical depth [IS THIS ONE NEEDED GIVEN THE OTHERS?]
+        'ssac_sw': [[climt_inputs['cloud_single_scattering_albedo']]] * len(SW_BANDS), # In-cloud single scattering albedo
+        'asmc_sw': [[climt_inputs['cloud_asymmetry_parameter']]] * len(SW_BANDS), # In-cloud asymmetry parameter
+        'fsfc_sw': [[climt_inputs['cloud_forward_scattering_fraction']]] * len(SW_BANDS), # In-cloud forward scattering fraction (delta function pointing forward "forward peaked scattering")
+        'cldfrac': [climt_inputs['cldf']], # layer cloud fraction
+        'ciwp': [climt_inputs['ciwp']], # in-cloud ice water path (g/m2)
+        'clwp': [climt_inputs['clwp']], # in-cloud liquid water path (g/m2)
+        'reic': [climt_inputs['r_ice']], # Cloud ice particle effective size (microns)
+                      # specific definition of reicmcl depends on setting of iceflglw:
+                      # iceflglw = 0: ice effective radius, r_ec, (Ebert and Curry, 1992),
+                      #               r_ec must be >= 10.0 microns
+                      # iceflglw = 1: ice effective radius, r_ec, (Ebert and Curry, 1992),
+                      #               r_ec range is limited to 13.0 to 130.0 microns
+                      # iceflglw = 2: ice effective radius, r_k, (Key, Streamer Ref. Manual, 1996)
+                      #               r_k range is limited to 5.0 to 131.0 microns
+                      # iceflglw = 3: generalized effective size, dge, (Fu, 1996),
+                      #               dge range is limited to 5.0 to 140.0 microns
+                      #               [dge = 1.0315 * r_ec]
+        'relq': [climt_inputs['r_liq']], # Cloud water drop effective radius (microns)
         'inflglw': 2,
         'iceflgslw': 0,
         'liqflglw': 1,
-        'cldfmcl_lw': [[climt_inputs['cldf']]] * 140, # Cloud fraction; 140 is the "g-interval" for lw, ngptlw, set in parrrtm.f90
-        'ciwpmcl_lw': [[climt_inputs['ciwp']]] * 140, # in-cloud ice water path (g/m2)
-        'clwpmcl_lw': [[climt_inputs['clwp']]] * 140, # in-cloud liquid water path (g/m2)        
-        'reicmcl_lw': [climt_inputs['r_ice']],    #  Cloud ice particle effective size (microns)
-                                                              # specific definition of reicmcl depends on setting of iceflglw:
-                                                              # iceflglw = 0: ice effective radius, r_ec, (Ebert and Curry, 1992),
-                                                              #               r_ec must be >= 10.0 microns
-                                                              # iceflglw = 1: ice effective radius, r_ec, (Ebert and Curry, 1992),
-                                                              #               r_ec range is limited to 13.0 to 130.0 microns
-                                                              # iceflglw = 2: ice effective radius, r_k, (Key, Streamer Ref. Manual, 1996)
-                                                              #               r_k range is limited to 5.0 to 131.0 microns
-                                                              # iceflglw = 3: generalized effective size, dge, (Fu, 1996),
-                                                              #               dge range is limited to 5.0 to 140.0 microns
-                                                              #               [dge = 1.0315 * r_ec]
-        'relqmcl_lw': [climt_inputs['r_liq']], # Cloud water drop effective radius (microns)
-        'taucmcl_lw': [[None]] * 140, # In-cloud optical depth [IS THIS ONE NEEDED GIVEN THE OTHERS?]
+        'tauc_lw': [[climt_inputs['tauc_lw']]] * len(LW_BANDS), # in-cloud optical depth 
 
         # AEROSOLS
         # SW
