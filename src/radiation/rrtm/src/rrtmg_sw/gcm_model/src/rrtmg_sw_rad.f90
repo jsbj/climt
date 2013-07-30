@@ -60,7 +60,7 @@
       use rrtmg_sw_cldprmc, only: cldprmc_sw
 ! *** Move the required call to rrtmg_sw_ini below and the following 
 ! use association to GCM initialization area ***
-     use rrtmg_sw_init, only: rrtmg_sw_ini
+!      use rrtmg_sw_init, only: rrtmg_sw_ini
       use rrtmg_sw_setcoef, only: setcoef_sw
       use rrtmg_sw_spcvmc, only: spcvmc_sw
 
@@ -466,7 +466,6 @@
 
 
 ! Initializations
-
       zepsec = 1.e-06_rb
       zepzen = 1.e-10_rb
       oneminus = 1.0_rb - zepsec
@@ -501,7 +500,7 @@
 !           input aerosol optical depth at 0.55 microns for each aerosol type (ecaer)
 ! iaer = 10, input total aerosol optical depth, single scattering albedo 
 !            and asymmetry parameter (tauaer, ssaaer, asmaer) directly
-      iaer = 0
+      iaer = 10
 
 ! Set idelm to select between delta-M scaled or unscaled output direct and diffuse fluxes
 ! NOTE: total downward fluxes are always delta scaled
@@ -517,7 +516,7 @@
 !
 ! In a GCM this call should be placed in the model initialization
 ! area, since this has to be called only once.  
-     call rrtmg_sw_ini(cpdair)
+!      call rrtmg_sw_ini(cpdair)
 
 ! This is the main longitude/column loop in RRTMG.
 ! Modify to loop over all columns (nlon) or over daylight columns
@@ -692,10 +691,9 @@
               selffac, selffrac, indself, forfac, forfrac, indfor, &
               zbbfd, zbbfu, zbbcd, zbbcu, zuvfd, zuvcd, znifd, znicd, &
               zbbfddir, zbbcddir, zuvfddir, zuvcddir, znifddir, znicddir)
-
+              
 ! Transfer up and down, clear and total sky fluxes to output arrays.
 ! Vertical indexing goes from bottom to top; reverse here for GCM if necessary.
-
          do i = 1, nlayers+1
             swuflxc(iplon,i) = zbbcu(i)
             swdflxc(iplon,i) = zbbcd(i)
@@ -976,6 +974,7 @@
          adjflux(ib) = adjflx * solvar(ib)
       enddo
 
+
 !  Set surface temperature.
       tbound = tsfc(iplon)
 
@@ -1065,7 +1064,6 @@
 
 ! Transfer cloud fraction and cloud optical properties to RRTM variables;
 ! modify to reverse layer indexing here if necessary.
-
       if (icld .ge. 1) then 
          inflag = inflgsw
          iceflag = iceflgsw

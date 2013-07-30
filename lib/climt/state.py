@@ -65,7 +65,8 @@ KnownFields = {
     # SHOULD THESE BE PARAMETERS?
     'cloud_single_scattering_albedo': ['blah', 'blah', '3D'],
     'cloud_asymmetry_parameter': ['blah', 'blah', '3D'],
-    'cloud_forward_scattering_fraction': ['blah', 'blah', '3D']
+    'cloud_forward_scattering_fraction': ['blah', 'blah', '3D'],
+    'tauc_lw': ['blah', 'blah', '3D']
 }
 
 import os

@@ -203,7 +203,6 @@
 !      real(kind=rb), intent(out) :: pvsfu(:)
 
 ! ------- Local -------
-
       logical :: lrtchkclr(nlayers),lrtchkcld(nlayers)
 
       integer(kind=im)  :: klev
@@ -293,7 +292,7 @@
                      zsflxzen, ztaug, ztaur)
 
 ! Top of shortwave spectral band loop, jb = 16 -> 29; ibm = 1 -> 14
-
+! AFTER HERE
       do jb = ib1, ib2
          ibm = jb-15
          igt = ngc(ibm)
@@ -315,7 +314,6 @@
 ! Apply adjustment for correct Earth/Sun distance and zenith angle to incoming solar flux
             zincflx(iw) = adjflux(jb) * zsflxzen(iw) * prmu0
 !             zincflux = zincflux + adjflux(jb) * zsflxzen(iw) * prmu0           ! inactive
-
 ! Compute layer reflectances and transmittances for direct and diffuse sources, 
 ! first clear then cloudy
 
@@ -448,7 +446,6 @@
                endif
 !   /\/\/\ Above code only needed for unscaled direct beam calculation
 
-
 ! Delta scaling - clear   
                zf = zgcc(jk) * zgcc(jk)
                zwf = zomcc(jk) * zf
@@ -496,7 +493,7 @@
             call reftra_sw (klev, &
                             lrtchkcld, zgco, prmu0, ztauo, zomco, &
                             zrefo, zrefdo, ztrao, ztrado)
-
+! AFTER HERE
             do jk=1,klev
 
 ! Combine clear and cloudy contributions for total sky
@@ -513,10 +510,11 @@
 
 ! Clear
 !                zdbtmc = exp(-ztauc(jk) / prmu0)
-
+! AFTER HERE
 ! Use exponential lookup table for transmittance, or expansion of 
 ! exponential for low tau
                ze1 = ztauc(jk) / prmu0
+
                if (ze1 .le. od_lo) then
                   zdbtmc = 1._rb - ze1 + 0.5_rb * ze1 * ze1
                else
@@ -524,7 +522,7 @@
                   itind = tblint * tblind + 0.5_rb
                   zdbtmc = exp_tbl(itind)
                endif
-
+! BEFORE HERE
                zdbtc(jk) = zdbtmc
                ztdbtc(jk+1) = zdbtc(jk)*ztdbtc(jk)
 
@@ -548,7 +546,7 @@
             enddo           
                  
 ! Vertical quadrature for clear-sky fluxes
-
+!! BEFORE HERE
             call vrtqdr_sw(klev, iw, &
                            zrefc, zrefdc, ztrac, ztradc, &
                            zdbtc, zrdndc, zrupc, zrupdc, ztdbtc, &

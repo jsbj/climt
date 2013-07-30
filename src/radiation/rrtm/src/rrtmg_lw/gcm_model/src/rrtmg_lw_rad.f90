@@ -59,7 +59,7 @@
       use rrtmg_lw_cldprmc, only: cldprmc
 ! *** Move the required call to rrtmg_lw_ini below and the following 
 ! use association to the GCM initialization area ***
-     use rrtmg_lw_init, only: rrtmg_lw_ini
+!      use rrtmg_lw_init, only: rrtmg_lw_ini
       use rrtmg_lw_rtrnmc, only: rtrnmc
       use rrtmg_lw_setcoef, only: setcoef
       use rrtmg_lw_taumol, only: taumol
@@ -461,7 +461,7 @@
 !
 ! In a GCM this call should be placed in the model initialization
 ! area, since this has to be called only once.  
-     call rrtmg_lw_ini(cpdair)
+!      call rrtmg_lw_ini(cpdair)
 
 !  This is the main longitude/column loop within RRTMG.
       do iplon = 1, ncol

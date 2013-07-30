@@ -7,7 +7,7 @@ from component  import Component
 class radiation(Component):
     """
     Interface to atmospheric radiation schemes.
-
+    
     * Instantiation:
     
       x=climt.radiation( <args> )
@@ -54,9 +54,9 @@ class radiation(Component):
                                                              
     * Usage:
       Call instance directly to compute radiative fluxes and heating rates:
-
+      
       x( <args> )
-
+      
       where <args> are as above.
         
     * Output (accessible as x['swhr'] etc.):
@@ -177,7 +177,7 @@ class radiation(Component):
         try: import _rrtm_radiation
         except: raise ImportError, '\n \n ++++ CliMT.radiation: Could not load rrtm scheme'
         # Define some attributes
-        self.name = 'rrtm_radiation'
+        self.Name = 'rrtm_radiation'
         self.LevType = 'p'
         self.Extension = _rrtm_radiation
         self.driver = _rrtm_radiation.driver
@@ -189,6 +189,10 @@ class radiation(Component):
             # 'lwhr', #       LW heating rate                 K day-1
             # 'swflx', #      Net SW radiative flux           W m-2   At grid-cell midpoints
             # 'lwflx', #      Net LW radiative flux           W m-2   At grid-cell midpoints
+            'swuflx',
+            'swdflx',
+            'lwuflx',
+            'lwdflx',
             'SwToa', #      Top-of-atmos SW rad flux        W m-2
             'LwToa' #, #      Top-of-atmos LW rad flux        W m-2
             # 'SwSrf', #      Surface  SW rad flux            W m-2
@@ -198,6 +202,6 @@ class radiation(Component):
             # 'LwToaCf', #    LW cloud forc, top of atmos     W m-2   
             # 'LwSrfCf' #    LW cloud forc, surface          W m-2
         ]
-        self.Required       = [field for field in _rrtm_radiation.INPUTS if field not in ['co2', 'n2o', 'ch4', 'cfc11', 'cfc12', 'cfc22', 'scon', 'o2', 'ccl4', 'tauaer_sw', 'ssaaer_sw', 'asmaer_sw', 'tauaer_lw', 'lw_surface_emissivity']]#['T','q','p','ps','solin','Ts']
+        self.Required       = [field for field in _rrtm_radiation.INPUTS if field not in ['co2', 'n2o', 'ch4', 'cfc11', 'cfc12', 'cfc22', 'scon', 'o2', 'ccl4', 'tauaer_sw', 'ssaaer_sw', 'asmaer_sw', 'tauaer_lw', 'lw_surface_emissivity', 'Cpd']]#['T','q','p','ps','solin','Ts']
         self.Prognostic     = [] #'T']
         self.Diagnostic     = [] #'TdotRad','SrfRadFlx','lwhr','lwflx','lwup','lwdown','lwtau']

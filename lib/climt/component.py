@@ -7,6 +7,7 @@ from plot       import Monitor, Plot
 from io         import IO
 from utils      import squeeze
 from _grid      import get_nlev, get_nlat, get_nlon
+from sys        import stderr
 
 class Component:
     """
@@ -179,10 +180,10 @@ class Component:
         """
         """
         if self.Io.OutputFileName == OutputFileName:
-            print '\n +++ ClimT.Io: File %s is currently open for output'% OutputFileName
+            stderr.write('\n +++ ClimT.Io: File %s is currently open for output'% OutputFileName)
             return
         else:
-            print 'Opening %s for output'% OutputFileName
+            stderr.write('Opening %s for output'% OutputFileName)
             self.Io.OutputFileName = OutputFileName
             self.Io.DoingOutput = True
             self.Io.Appending = False
@@ -202,7 +203,7 @@ class Component:
         print self.__doc__
 
     def report(self):
-        print 'CliMT component:\n    %s' % self.Name
+        stderr.write('CliMT component:\n    %s' % self.Name)
         keys = self.State.keys()
         keys1 = []
         for i in range(len(keys)):
@@ -212,7 +213,7 @@ class Component:
         for i in range(len(keys)):
             if keys[i] not in self.Prognostic and keys[i] not in self.Diagnostic:
                                            keys1.append('%12s   %s' % (keys[i],'(Fixed)'))
-        print 'State variables:\n %s' % '\n '.join( keys1 )
+        stderr.write('State variables:\n %s' % '\n '.join( keys1 ))
 
     def _checkUnused(self,kwargs):
         '''
@@ -232,8 +233,8 @@ class Component:
         if len(unused) > 0: 
            if len(unused) == 1: suffix = 'y'
            else              : suffix = 'ies'
-           print '\n ++++ CliMT.'+self.Name+'.initialize: WARNING: Input quantit%s %s not used.\n' \
-                  % (suffix,str(list(unused)))
+           stderr.write('\n ++++ CliMT.'+self.Name+'.initialize: WARNING: Input quantit%s %s not used.\n' \
+                  % (suffix,str(list(unused))))
 
     def _getShape3D(self, **kwargs):
         '''
