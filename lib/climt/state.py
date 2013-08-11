@@ -75,7 +75,7 @@ KnownFields = {
 import os
 from numpy import *
 from grid      import Grid
-from _timestep import leapfrog
+#from _timestep import leapfrog
 
 class State:
     '''
@@ -216,9 +216,9 @@ class State:
             # create ozone instance to provide default ozone values
             # note that values will NOT evolve unless ozone explicitly
             # federated
-            from ozone import ozone
-            ozone = ozone(**kwargs) 
-            return ozone.State['o3']
+            #from ozone import ozone
+            #ozone = ozone(**kwargs) 
+            return [] #ozone.State['o3']
 
         # Cloud frac
         if 'cldf' == Field: return zeros(Shape,'d')

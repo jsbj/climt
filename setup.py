@@ -24,40 +24,40 @@ Extensions = [
      'dir':'src/grid'},
     {'name':'timestep',
      'dir':'src/timestep'},
-    {'name':'thermodyn',
-     'dir':'src/thermodyn'},
-    {'name':'emanuel_convection',
-     'dir':'src/convection/emanuel'},
-    {'name':'hard_adjustment',
-     'dir':'src/convection/hard'},
-    {'name':'sbm_convection',
-     'dir':'src/convection/hard'},
-    {'name':'axisymmetric_dynamics',
-     'dir':'src/dynamics/axisymmetric'},
-    {'name':'slab_ocean',
-     'dir':'src/ocean/slab_ocean'},
-    {'name':'ccm3_radiation',
-     'dir':'src/radiation/ccm3',
-     'cppflags':'-DSUN -DPLON=%i -DPLEV=%i -DPLEVR=%i' % (IM,KM,KM)},
-    {'name':'cam3_radiation',
-     'dir':'src/radiation/cam3',
-     'cppflags':'-DPLEV=%i' % KM,
-     'lib':['netcdf','netcdff'],
-     'libdir': [NC_LIB],
-     'incdir': [NC_INC]},
-    {'name':'chou_radiation',
-     'dir':'src/radiation/chou'},
-    {'name':'greygas_radiation',
-     'dir':'src/radiation/greygas'},
-    {'name':'ozone',
-     'dir':'src/radiation/ozone'},
-    {'name':'insolation',
-     'dir':'src/radiation/insolation'},
-    {'name':'ccm3_turbulence',
-     'dir':'src/turbulence/ccm3',
-     'cppflags':'-DPLON=%i -DPLEV=%i' % (IM,KM)},
-    {'name':'simple_turbulence',
-     'dir':'src/turbulence/simple'},
+#    {'name':'thermodyn',
+#     'dir':'src/thermodyn'},
+#    {'name':'emanuel_convection',
+#     'dir':'src/convection/emanuel'},
+#    {'name':'hard_adjustment',
+#     'dir':'src/convection/hard'},
+#    {'name':'sbm_convection',
+#     'dir':'src/convection/hard'},
+#    {'name':'axisymmetric_dynamics',
+#     'dir':'src/dynamics/axisymmetric'},
+#    {'name':'slab_ocean',
+#     'dir':'src/ocean/slab_ocean'},
+#    {'name':'ccm3_radiation',
+#     'dir':'src/radiation/ccm3',
+#     'cppflags':'-DSUN -DPLON=%i -DPLEV=%i -DPLEVR=%i' % (IM,KM,KM)},
+#    {'name':'cam3_radiation',
+#     'dir':'src/radiation/cam3',
+#     'cppflags':'-DPLEV=%i' % KM,
+#     'lib':['netcdf','netcdff'],
+#     'libdir': [NC_LIB],
+#     'incdir': [NC_INC]},
+#    {'name':'chou_radiation',
+#     'dir':'src/radiation/chou'},
+#    {'name':'greygas_radiation',
+#     'dir':'src/radiation/greygas'},
+#    {'name':'ozone',
+#     'dir':'src/radiation/ozone'},
+#    {'name':'insolation',
+#     'dir':'src/radiation/insolation'},
+#    {'name':'ccm3_turbulence',
+#     'dir':'src/turbulence/ccm3',
+#     'cppflags':'-DPLON=%i -DPLEV=%i' % (IM,KM)},
+#    {'name':'simple_turbulence',
+#     'dir':'src/turbulence/simple'},
     {'name':'rrtm_radiation_fortran',
      'dir':'src/radiation/rrtm'}
     ]
@@ -79,6 +79,7 @@ print 'Using %s compiler' % compiler
 
 # set some fortran compiler-dependent flags
 if compiler == 'gnu95':
+    compiler = 'gfortran'
     f77flags='-ffixed-line-length-132 -fdefault-real-8'
     f90flags='-fdefault-real-8'
 elif compiler == 'intel' or compiler == 'intelem':
@@ -133,7 +134,7 @@ def build_ext(name=None, dir=None, cppflags='', f77flags='', f90flags='', \
     target = '_%s.so' % name
     driver = glob.glob(os.path.join(dir,'Driver.f*'))[0]
     f77flags = '-c %s %s' % (cppflags,f77flags)
-    f90flags = '-c -fno-range-check %s %s' % (cppflags,f90flags)
+    f90flags = '-c -fPIC -fno-range-check %s %s' % (cppflags,f90flags)
     if buildNeeded(target,src):
         print '\n Building %s ... \n' % os.path.basename(target)
         for filename in src:
@@ -151,7 +152,8 @@ def build_ext(name=None, dir=None, cppflags='', f77flags='', f90flags='', \
             os.system(f90command)
             
         os.system('cd tmp; f2py -m _%s -h _%s.pyf --overwrite-signature %s' % (name,name,driver.split('/')[-1]))
-        os.system('cd tmp; f2py -c _%s.pyf --build-dir .  *.o' % (name))
+        os.system('cd tmp; f2py -c --fcompiler=gnu95 _%s.pyf --build-dir .  *.o' % (name))
+        os.system('cd tmp; gcc -pthread -shared ./src.linux-x86_64-2.6/_rrtm_radiation_fortranmodule.o ./src.linux-x86_64-2.6/fortranobject.o Driver.o mcica_random_numbers.o mcica_subcol_gen_lw.o mcica_subcol_gen_sw.o parkind.o parrrsw.o parrrtm.o rrlw_cld.o rrlw_con.o rrlw_kg01.o rrlw_kg02.o rrlw_kg03.o rrlw_kg04.o rrlw_kg05.o rrlw_kg06.o rrlw_kg07.o rrlw_kg08.o rrlw_kg09.o rrlw_kg10.o rrlw_kg11.o rrlw_kg12.o rrlw_kg13.o rrlw_kg14.o rrlw_kg15.o rrlw_kg16.o rrlw_ncpar.o rrlw_ref.o rrlw_tbl.o rrlw_vsn.o rrlw_wvn.o rrsw_aer.o rrsw_cld.o rrsw_con.o rrsw_kg16.o rrsw_kg17.o rrsw_kg18.o rrsw_kg19.o rrsw_kg20.o rrsw_kg21.o rrsw_kg22.o rrsw_kg23.o rrsw_kg24.o rrsw_kg25.o rrsw_kg26.o rrsw_kg27.o rrsw_kg28.o rrsw_kg29.o rrsw_ncpar.o rrsw_ref.o rrsw_tbl.o rrsw_vsn.o rrsw_wvn.o rrtmg_lw_cldprmc.o rrtmg_lw_init.o rrtmg_lw_k_g.o rrtmg_lw_rad.o rrtmg_lw_rtrnmc.o rrtmg_lw_setcoef.o rrtmg_lw_taumol.o rrtmg_sw_cldprmc.o rrtmg_sw_init.o rrtmg_sw_k_g.o rrtmg_sw_rad.o rrtmg_sw_reftra.o rrtmg_sw_setcoef.o rrtmg_sw_spcvmc.o rrtmg_sw_taumol.o rrtmg_sw_vrtqdr.o -L/usr/lib64 -lpython2.6 -lgfortran -o ./_rrtm_radiation_fortran.so')
         os.system('mv tmp/_%s.so lib/climt' % name)
         os.system('rm -rf tmp')
         # # generate signature file
@@ -190,10 +192,10 @@ def setupClimt():
     # Build all extensions
     for ext in Extensions: build_ext(**ext)
 
-    # # Finish the setup
-    # # note: setup() cannot copy directories, and falls over
-    # # trying to copy the CVS directory in climt/lib/data
-    # # workaround: make data list which specifically excludes CVS
+    # Finish the setup
+    # note: setup() cannot copy directories, and falls over
+    # trying to copy the CVS directory in climt/lib/data
+    # workaround: make data list which specifically excludes CVS
     # os.chdir('lib/climt')
     # DataFiles = []
     # for File in glob.glob('data/*/*'):
@@ -201,16 +203,16 @@ def setupClimt():
     #         DataFiles.append(File)
     # print DataFiles
     # os.chdir('../..')
-    # 
-    # setup(name         = "CliMT",
-    #       version      = open('Version').read()[:-1],
-    #       description  = "Climate modelling and diagnostics toolkit",
-    #       author       = "Rodrigo Caballero",
-    #       author_email = "rodrigo@misu.su.se",
-    #       url          = "http://people.su.se/~rcaba/climt",
-    #       packages    = ['climt'],
-    #       package_dir = {'':'lib'},
-    #       package_data = {'climt':['*.so']+DataFiles})
+    
+    #setup(name         = "CliMT",
+    #      version      = open('Version').read()[:-1],
+    #      description  = "Climate modelling and diagnostics toolkit",
+    #      author       = "Rodrigo Caballero",
+    #      author_email = "rodrigo@misu.su.se",
+    #      url          = "http://people.su.se/~rcaba/climt",
+    #      packages    = ['climt'],
+    #      package_dir = {'':'lib'},
+    #      package_data = {'climt':['*.so']+DataFiles})
 
 
 def setupClimtLite():

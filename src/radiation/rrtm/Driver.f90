@@ -127,6 +127,7 @@ subroutine driver &
     call mcica_subcol_lw(iplon, ncol, nlay, icld, permuteseed_lw, irng, play, &
                        cldfrac, ciwp, clwp, reic, relq, tauc_lw, cldfmcl_lw, &
                        ciwpmcl_lw, clwpmcl_lw, reicmcl_lw, relqmcl_lw, taucmcl_lw)
+    write(6,*) 'got this far'
     call rrtmg_sw_ini(cpdair)
     call rrtmg_lw_ini(cpdair)
     call rrtmg_sw(ncol    ,nlay    ,icld    , &

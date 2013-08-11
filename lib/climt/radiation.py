@@ -174,9 +174,11 @@ class radiation(Component):
     
     def __rrtm__init__(self):
         # Load extension
-        try: import _rrtm_radiation
-        except: raise ImportError, '\n \n ++++ CliMT.radiation: Could not load rrtm scheme'
-        # Define some attributes
+        import sys; sys.stderr.write('got here')
+	try: import _rrtm_radiation
+	except: raise ImportError, '\n \n ++++ CliMT.radiation: Could not load rrtm scheme'
+        import sys; sys.stderr.write('and here')
+	# Define some attributes
         self.Name = 'rrtm_radiation'
         self.LevType = 'p'
         self.Extension = _rrtm_radiation
