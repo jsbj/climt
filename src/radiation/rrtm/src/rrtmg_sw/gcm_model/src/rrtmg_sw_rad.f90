@@ -464,7 +464,6 @@
 !      real(kind=rb) :: znicu(nlay+2)         ! temporary clear sky upward near-IR shortwave flux (w/m2)
 !      real(kind=rb) :: znicd(nlay+2)         ! temporary clear sky downward near-IR shortwave flux (w/m2)
 
-
 ! Initializations
       zepsec = 1.e-06_rb
       zepzen = 1.e-10_rb
@@ -551,7 +550,6 @@
 ! Calculate coefficients for the temperature and pressure dependence of the 
 ! molecular absorption coefficients by interpolating data from stored
 ! reference atmospheres.
-
          call setcoef_sw(nlayers, pavel, tavel, pz, tz, tbound, coldry, wkl, &
                          laytrop, layswtch, laylow, jp, jt, jt1, &
                          co2mult, colch4, colco2, colh2o, colmol, coln2o, &
@@ -994,7 +992,7 @@
 
       pz(0) = plev(iplon,1)
       tz(0) = tlev(iplon,1)
-      do l = 1, nlayers
+     do l = 1, nlayers
          pavel(l) = play(iplon,l)
          tavel(l) = tlay(iplon,l)
          pz(l) = plev(iplon,l+1)

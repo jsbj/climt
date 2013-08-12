@@ -272,7 +272,7 @@
 
 ! Lower atmosphere loop
       do lay = 1, laytrop
-         speccomb = colh2o(lay) + strrat1*colch4(lay)
+speccomb = colh2o(lay) + strrat1*colch4(lay)
          specparm = colh2o(lay)/speccomb 
          if (specparm .ge. oneminus) specparm = oneminus
          specmult = 8._rb*(specparm)
@@ -293,6 +293,7 @@
          tauray = colmol(lay) * rayl
 
          do ig = 1, ng16
+
             taug(lay,ig) = speccomb * &
                 (fac000 * absa(ind0   ,ig) + &
                  fac100 * absa(ind0 +1,ig) + &
@@ -311,7 +312,7 @@
                  (forref(indf+1,ig) - forref(indf,ig)))) 
 !            ssa(lay,ig) = tauray/taug(lay,ig)
             taur(lay,ig) = tauray
-         enddo
+        enddo
       enddo
 
       laysolfr = nlayers

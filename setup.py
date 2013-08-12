@@ -150,7 +150,7 @@ def build_ext(name=None, dir=None, cppflags='', f77flags='', f90flags='', \
             f90command = 'cd tmp;' + ' '.join((compiler, f90flags, ' '.join(f90src)))
             print f90command
             os.system(f90command)
-            
+        os.system('cp .f2py_f2cmap tmp/')    
         os.system('cd tmp; f2py -m _%s -h _%s.pyf --overwrite-signature %s' % (name,name,driver.split('/')[-1]))
         os.system('cd tmp; f2py -c --fcompiler=gnu95 _%s.pyf --build-dir .  *.o' % (name))
         os.system('cd tmp; gcc -pthread -shared ./src.linux-x86_64-2.6/_rrtm_radiation_fortranmodule.o ./src.linux-x86_64-2.6/fortranobject.o Driver.o mcica_random_numbers.o mcica_subcol_gen_lw.o mcica_subcol_gen_sw.o parkind.o parrrsw.o parrrtm.o rrlw_cld.o rrlw_con.o rrlw_kg01.o rrlw_kg02.o rrlw_kg03.o rrlw_kg04.o rrlw_kg05.o rrlw_kg06.o rrlw_kg07.o rrlw_kg08.o rrlw_kg09.o rrlw_kg10.o rrlw_kg11.o rrlw_kg12.o rrlw_kg13.o rrlw_kg14.o rrlw_kg15.o rrlw_kg16.o rrlw_ncpar.o rrlw_ref.o rrlw_tbl.o rrlw_vsn.o rrlw_wvn.o rrsw_aer.o rrsw_cld.o rrsw_con.o rrsw_kg16.o rrsw_kg17.o rrsw_kg18.o rrsw_kg19.o rrsw_kg20.o rrsw_kg21.o rrsw_kg22.o rrsw_kg23.o rrsw_kg24.o rrsw_kg25.o rrsw_kg26.o rrsw_kg27.o rrsw_kg28.o rrsw_kg29.o rrsw_ncpar.o rrsw_ref.o rrsw_tbl.o rrsw_vsn.o rrsw_wvn.o rrtmg_lw_cldprmc.o rrtmg_lw_init.o rrtmg_lw_k_g.o rrtmg_lw_rad.o rrtmg_lw_rtrnmc.o rrtmg_lw_setcoef.o rrtmg_lw_taumol.o rrtmg_sw_cldprmc.o rrtmg_sw_init.o rrtmg_sw_k_g.o rrtmg_sw_rad.o rrtmg_sw_reftra.o rrtmg_sw_setcoef.o rrtmg_sw_spcvmc.o rrtmg_sw_taumol.o rrtmg_sw_vrtqdr.o -L/usr/lib64 -lpython2.6 -lgfortran -o ./_rrtm_radiation_fortran.so')

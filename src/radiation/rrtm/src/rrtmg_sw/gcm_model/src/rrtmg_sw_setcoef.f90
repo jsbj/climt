@@ -192,7 +192,6 @@
 
 ! Set up factors needed to separately include the water vapor
 ! foreign-continuum in the calculation of absorption coefficient.
-
          forfac(lay) = scalefac / (1.+water)
          factor = (332.0_rb-tavel(lay))/36.0_rb
          indfor(lay) = min(2, max(1, int(factor)))
