@@ -201,7 +201,6 @@ def driver(*args):
         [[[0.] * 6] * number_of_layers], # Aerosol optical depth at 0.55 micron (iaer=6 only), Dimensions: (ncol,nlay,naerec), #'ecaer_sw':  (non-delta scaled)
         [climt_inputs['tauaer_lw'] or [[0.] * len(LW_BANDS)] * number_of_layers] #'tauaer_lw': 
     ]
-    import pdb; pdb.set_trace()
     output = _rrtm_radiation_fortran.driver(*rrtm_inputs)
 
     # 

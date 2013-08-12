@@ -129,7 +129,6 @@ subroutine driver &
                        ciwpmcl_lw, clwpmcl_lw, reicmcl_lw, relqmcl_lw, taucmcl_lw)
     call rrtmg_sw_ini(cpdair)
     call rrtmg_lw_ini(cpdair)
-    write(6,*) plev 
     call rrtmg_sw(ncol    ,nlay    ,icld    , &
              play    ,plev    ,tlay    ,tlev    ,tsfc   , &
              h2ovmr , o3vmr   ,co2vmr  ,ch4vmr  ,n2ovmr ,o2vmr , &
