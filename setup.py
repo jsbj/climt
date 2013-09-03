@@ -150,8 +150,8 @@ def build_ext(name=None, dir=None, cppflags='', f77flags='', f90flags='', \
             print f90command
             os.system(f90command)
             
-        os.system('cd tmp; f2py -m _%s -h _%s.pyf --overwrite-signature %s' % (name,name,driver.split('/')[-1]))
-        os.system('cd tmp; f2py -c _%s.pyf --build-dir .  *.o' % (name))
+        os.system('cd tmp; f2py -m --fcompiler=gnu95 _%s -h _%s.pyf --overwrite-signature %s' % (name,name,driver.split('/')[-1]))
+        os.system('cd tmp; f2py -c --fcompiler=gnu95 _%s.pyf --build-dir .  *.o' % (name))
         os.system('mv tmp/_%s.so lib/climt' % name)
         os.system('rm -rf tmp')
         # # generate signature file
