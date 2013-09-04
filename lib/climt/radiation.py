@@ -174,6 +174,7 @@ class radiation(Component):
     
     def __rrtm__init__(self):
         # Load extension
+        # import pdb; pdb.set_trace()
         try: import _rrtm_radiation
         except: raise ImportError, '\n \n ++++ CliMT.radiation: Could not load rrtm scheme'
         # Define some attributes

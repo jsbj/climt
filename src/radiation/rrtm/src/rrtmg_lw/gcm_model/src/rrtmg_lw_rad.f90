@@ -787,6 +787,10 @@
          coldry(l) = (pz(l-1)-pz(l)) * 1.e3_rb * avogad / &
                      (1.e2_rb * grav * amm * (1._rb + wkl(1,l)))
       enddo
+       WRITE(6,*) pz
+       write(6,*) tz
+       write(6,*) pavel
+       write(6,*) tavel
 
 ! Set cross section molecule amounts from input; convert to vmr if necessary
       do l=1, nlayers

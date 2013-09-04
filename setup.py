@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 import os,glob,string,sys
-from numpy.distutils.core  import setup, Extension
+from numpy.distutils.core import setup, Extension
 from numpy.distutils import fcompiler
 from distutils.dep_util import newer
 
 ## -------- set these
-KM = 26 
+KM = 32
 JM = 1
 IM = 1
 NC_INC = '/usr/local/include'
@@ -128,89 +128,93 @@ def buildNeeded(target,src):
 def build_ext(name=None, dir=None, cppflags='', f77flags='', f90flags='', \
               lib='', libdir='', incdir=''):
     #Builds an extension
-    os.system('rm -rf tmp; mkdir tmp')
     src = getSources(dir)
     target = '_%s.so' % name
     driver = glob.glob(os.path.join(dir,'Driver.f*'))[0]
-    f77flags = '-c %s %s' % (cppflags,f77flags)
-    f90flags = '-c -fno-range-check %s %s' % (cppflags,f90flags)
+    f77flags = '"%s %s"' % (cppflags,f77flags)
+    f90flags = '"%s %s"' % (cppflags,f90flags)
+    if name == 'rrtm_radiation_fortran':
+        f77flags = '-c ' + f77flags[1:-1]
+        f90flags = '-c -fno-range-check ' + f90flags[1:-1]
     if buildNeeded(target,src):
         print '\n Building %s ... \n' % os.path.basename(target)
-        for filename in src:
-            os.system('cp %s tmp/' % filename)
-        f77src = [filename.split('/')[-1] for filename in src if filename[-2:] in ['.f', '.F']]
-        f90src = [filename.split('/')[-1] for filename in src if filename[-4:] in ['.f90', '.F90']]
-        if len(f77src) > 0:
-            f77command = 'cd tmp;' + ' '.join((compiler, f77flags, ' '.join(f77src)))
-            print f77command
-            os.system(f77command)
+        if not name == 'rrtm_radiation_fortran':
+            # generate signature file
+            os.system('f2py --overwrite-signature %s -m _%s -h _%s.pyf'%(driver,name,name))
+            # compile extension
+            F2pyCommand = []
+            F2pyCommand.append('f2py -c -m _%s' % name)
+            F2pyCommand.append('--fcompiler=%s' % compiler)
+            F2pyCommand.append('-I%s' % dir)
+            F2pyCommand.append('-I%s' % os.path.join(dir,'include'))
+            F2pyCommand.append('-I%s' % os.path.join(dir,'src'))
+            F2pyCommand.append('-I%s' % os.path.join(dir,'src','include'))
+            if incdir is not '':
+                for i in incdir:
+                    F2pyCommand.append('-I%s' % i)
+            if libdir is not '':
+                for i in libdir:
+                    F2pyCommand.append('-L%s' % i)
+            if lib is not '':
+                for i in lib:
+                    F2pyCommand.append('-l%s' % i)
+            F2pyCommand.append('--f77flags=%s' % f77flags)
+            F2pyCommand.append('--f90flags=%s' % f90flags)
+            F2pyCommand.append('_%s.pyf' % name)
+            F2pyCommand.append('%s' % string.join(src))
+            F2pyCommand = string.join(F2pyCommand)
+            print F2pyCommand
+            if os.system(F2pyCommand) > 0:
+                print '+++ Compilation failed'
+                sys.exit()
+            os.system('mv -f _%s.so lib/climt' % name)
+            os.system('rm -f _%s.pyf' % name)
+        else:
+            os.system('rm -rf tmp; mkdir tmp')
+            for filename in src:
+                os.system('cp %s tmp/' % filename)
+            f77src = [filename.split('/')[-1] for filename in src if filename[-2:] in ['.f', '.F']]
+            f90src = [filename.split('/')[-1] for filename in src if filename[-4:] in ['.f90', '.F90']]
+            if len(f77src) > 0:
+                f77command = 'cd tmp;' + ' '.join((compiler, f77flags, ' '.join(f77src)))
+                print f77command
+                os.system(f77command)
             
-        if len(f90src) > 0:
-            f90command = 'cd tmp;' + ' '.join((compiler, f90flags, ' '.join(f90src)))
-            print f90command
-            os.system(f90command)
+            if len(f90src) > 0:
+                f90command = 'cd tmp;' + ' '.join((compiler, f90flags, ' '.join(f90src)))
+                print f90command
+                os.system(f90command)
             
-        os.system('cd tmp; f2py -m --fcompiler=gnu95 _%s -h _%s.pyf --overwrite-signature %s' % (name,name,driver.split('/')[-1]))
-        os.system('cd tmp; f2py -c --fcompiler=gnu95 _%s.pyf --build-dir .  *.o' % (name))
-        os.system('mv tmp/_%s.so lib/climt' % name)
-        os.system('rm -rf tmp')
-        # # generate signature file
-        # os.system('f2py --overwrite-signature %s -m _%s -h _%s.pyf'%(driver,name,name))
-        # # compile extension
-        # F2pyCommand = []
-        # F2pyCommand.append('f2py -c -m _%s' % name)
-        # F2pyCommand.append('--fcompiler=%s' % compiler)
-        # F2pyCommand.append('-I%s' % dir)
-        # F2pyCommand.append('-I%s' % os.path.join(dir,'include'))
-        # F2pyCommand.append('-I%s' % os.path.join(dir,'src'))
-        # F2pyCommand.append('-I%s' % os.path.join(dir,'src','include'))
-        # if incdir is not '':
-        #     for i in incdir:
-        #         F2pyCommand.append('-I%s' % i)
-        # if libdir is not '':
-        #     for i in libdir:
-        #         F2pyCommand.append('-L%s' % i)
-        # if lib is not '':
-        #     for i in lib:
-        #         F2pyCommand.append('-l%s' % i)
-        # F2pyCommand.append('--f77flags=%s' % f77flags)
-        # F2pyCommand.append('--f90flags=%s' % f90flags)
-        # F2pyCommand.append('_%s.pyf' % name)
-        # F2pyCommand.append('%s' % string.join(src))
-        # F2pyCommand = string.join(F2pyCommand)
-        # print F2pyCommand
-        # import pdb;pdb.set_trace()
-        # if os.system(F2pyCommand) > 0:
-        #     print '+++ Compilation failed'
-        #     sys.exit()
-        # os.system('mv -f _%s.so lib/climt' % name)
-        # os.system('rm -f _%s.pyf' % name)
+            os.system('cd tmp; f2py -m _%s -h _%s.pyf --overwrite-signature %s' % (name,name,driver.split('/')[-1]))
+            os.system('cd tmp; f2py -c _%s.pyf --build-dir .  *.o' % (name))
+            os.system('mv tmp/_%s.so lib/climt' % name)
+            os.system('rm -rf tmp')
 
 def setupClimt():
     # Build all extensions
     for ext in Extensions: build_ext(**ext)
 
-    # # Finish the setup
-    # # note: setup() cannot copy directories, and falls over
-    # # trying to copy the CVS directory in climt/lib/data
-    # # workaround: make data list which specifically excludes CVS
-    # os.chdir('lib/climt')
-    # DataFiles = []
-    # for File in glob.glob('data/*/*'):
-    #     if 'CVS' not in File:
-    #         DataFiles.append(File)
-    # print DataFiles
-    # os.chdir('../..')
-    # 
-    # setup(name         = "CliMT",
-    #       version      = open('Version').read()[:-1],
-    #       description  = "Climate modelling and diagnostics toolkit",
-    #       author       = "Rodrigo Caballero",
-    #       author_email = "rodrigo@misu.su.se",
-    #       url          = "http://people.su.se/~rcaba/climt",
-    #       packages    = ['climt'],
-    #       package_dir = {'':'lib'},
-    #       package_data = {'climt':['*.so']+DataFiles})
+    # Finish the setup
+    # note: setup() cannot copy directories, and falls over
+    # trying to copy the CVS directory in climt/lib/data
+    # workaround: make data list which specifically excludes CVS
+    os.chdir('lib/climt')
+    DataFiles = []
+    for File in glob.glob('data/*/*'):
+        if 'CVS' not in File:
+            DataFiles.append(File)
+    print DataFiles
+    os.chdir('../..')
+    
+    setup(name = "CliMT",
+          version = open('Version').read()[:-1],
+          description = "Climate modelling and diagnostics toolkit",
+          author = "Rodrigo Caballero",
+          author_email = "rodrigo@misu.su.se",
+          url = "http://people.su.se/~rcaba/climt",
+          packages = ['climt'],
+          package_dir = {'':'lib'},
+          package_data = {'climt':['*.so']+DataFiles})
 
 
 def setupClimtLite():

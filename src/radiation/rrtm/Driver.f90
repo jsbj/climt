@@ -1,6 +1,6 @@
 ! see _rrtm_radiation for the python that prepares these arguments...
 subroutine driver &
-    (nbndlw, ngptlw, nbndsw, ngptsw, naerec, iplon, ncol, nlay, icld, &
+    (nbndlw, nbndsw, naerec, ncol, nlay, icld, &
     permuteseed_sw, permuteseed_lw, irng, idrv, cpdair, play, plev, &
     tlay, tlev, tsfc, h2ovmr, o3vmr, co2vmr, ch4vmr, n2ovmr, &
     o2vmr, cfc11vmr, cfc12vmr, cfc22vmr, ccl4vmr, aldif, aldir, asdif, &
@@ -13,8 +13,6 @@ subroutine driver &
     use rrtmg_lw_rad, only: rrtmg_lw
     use rrtmg_sw_rad, only: rrtmg_sw
     use parkind, only: im => kind_im
-!     use parrrtm, only: nbndlw, ngptlw
-!     use parrrsw, only: nbndsw, ngptsw
     use mcica_subcol_gen_lw, only: mcica_subcol_lw
     use mcica_subcol_gen_sw, only: mcica_subcol_sw
     use rrtmg_lw_init, only: rrtmg_lw_ini
@@ -24,11 +22,9 @@ subroutine driver &
 ! Input
     integer, parameter :: rb = selected_real_kind(12)
     integer(kind=im), intent(in) :: nbndlw
-    integer(kind=im), intent(in) :: ngptlw
     integer(kind=im), intent(in) :: nbndsw
-    integer(kind=im), intent(in) :: ngptsw
     integer(kind=im), intent(in) :: naerec
-    integer(kind=im), intent(in) :: iplon
+!     integer(kind=im), intent(in) :: iplon
     integer(kind=im), intent(in) :: ncol
     integer(kind=im), intent(in) :: nlay
     integer(kind=im), intent(inout) :: icld
@@ -104,27 +100,27 @@ subroutine driver &
     real(kind=rb), intent(out) :: duflxc_dt(ncol,nlay+1)
 
     ! Local
-    real(kind=rb) :: cldfmcl_sw(ngptsw,ncol,nlay)
-    real(kind=rb) :: taucmcl_sw(ngptsw,ncol,nlay)
-    real(kind=rb) :: ssacmcl_sw(ngptsw,ncol,nlay)
-    real(kind=rb) :: asmcmcl_sw(ngptsw,ncol,nlay)
-    real(kind=rb) :: fsfcmcl_sw(ngptsw,ncol,nlay)
-    real(kind=rb) :: ciwpmcl_sw(ngptsw,ncol,nlay)
-    real(kind=rb) :: clwpmcl_sw(ngptsw,ncol,nlay)
+    real(kind=rb) :: cldfmcl_sw(112,ncol,nlay)
+    real(kind=rb) :: taucmcl_sw(112,ncol,nlay)
+    real(kind=rb) :: ssacmcl_sw(112,ncol,nlay)
+    real(kind=rb) :: asmcmcl_sw(112,ncol,nlay)
+    real(kind=rb) :: fsfcmcl_sw(112,ncol,nlay)
+    real(kind=rb) :: ciwpmcl_sw(112,ncol,nlay)
+    real(kind=rb) :: clwpmcl_sw(112,ncol,nlay)
     real(kind=rb) :: reicmcl_sw(ncol,nlay)
     real(kind=rb) :: relqmcl_sw(ncol,nlay)
-    real(kind=rb) :: cldfmcl_lw(ngptlw,ncol,nlay)
-    real(kind=rb) :: taucmcl_lw(ngptlw,ncol,nlay)
-    real(kind=rb) :: ciwpmcl_lw(ngptlw,ncol,nlay)
-    real(kind=rb) :: clwpmcl_lw(ngptlw,ncol,nlay)
+    real(kind=rb) :: cldfmcl_lw(140,ncol,nlay)
+    real(kind=rb) :: taucmcl_lw(140,ncol,nlay)
+    real(kind=rb) :: ciwpmcl_lw(140,ncol,nlay)
+    real(kind=rb) :: clwpmcl_lw(140,ncol,nlay)
     real(kind=rb) :: reicmcl_lw(ncol,nlay)
     real(kind=rb) :: relqmcl_lw(ncol,nlay)
 
-    call mcica_subcol_sw(iplon, ncol, nlay, icld, permuteseed_sw, irng, play, &
+    call mcica_subcol_sw(1, ncol, nlay, icld, permuteseed_sw, irng, play, &
                        cldfrac, ciwp, clwp, reic, relq, tauc_sw, ssac_sw, asmc_sw, fsfc_sw, &
                        cldfmcl_sw, ciwpmcl_sw, clwpmcl_sw, reicmcl_sw, relqmcl_sw, &
                        taucmcl_sw, ssacmcl_sw, asmcmcl_sw, fsfcmcl_sw)
-    call mcica_subcol_lw(iplon, ncol, nlay, icld, permuteseed_lw, irng, play, &
+    call mcica_subcol_lw(1, ncol, nlay, icld, permuteseed_lw, irng, play, &
                        cldfrac, ciwp, clwp, reic, relq, tauc_lw, cldfmcl_lw, &
                        ciwpmcl_lw, clwpmcl_lw, reicmcl_lw, relqmcl_lw, taucmcl_lw)
     call rrtmg_sw_ini(cpdair)
