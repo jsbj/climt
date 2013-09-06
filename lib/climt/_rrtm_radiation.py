@@ -89,7 +89,7 @@ def driver(*args):
     if 'h2o' in climt_inputs and climt_inputs['h2o']:
         h2o_concentration = [[h2o[0][0] for h2o in climt_inputs['h2o']]]
     else:
-        h2o_concentration = [[0. and (((q/1000.)/(1. - (q/1000.)))*1.607793)[0][0] for q in climt_inputs['q']]]
+        h2o_concentration = [[(((q/1000.)/(1. - (q/1000.)))*1.607793)[0][0] for q in climt_inputs['q']]]
     
     for key in ['tauaer_sw', 'ssaaer_sw', 'asmaer_sw', 'tauaer_lw']:
         if not climt_inputs[key]:
@@ -115,14 +115,14 @@ def driver(*args):
         ['tsfc',  [climt_inputs['Ts']]], # surface temperature
         # GASES, used in both SW and LW
         ['h2ovmr',  h2o_concentration],
-        ['o3vmr',  [[0. and o3[0][0] * 0.603428 for o3 in climt_inputs['o3']]]], # convert from kg/kg to volume mixing ratio using molecular weight of dry air / ozone
+        ['o3vmr',  [[o3[0][0] * 0.603428 for o3 in climt_inputs['o3']]]], # convert from kg/kg to volume mixing ratio using molecular weight of dry air / ozone
         ['co2vmr',  [[co2 * 1.e-6 for co2 in climt_inputs['co2']]]],
-        ['ch4vmr',  [[0. and ch4 * 1.e-6 for ch4 in climt_inputs['ch4']]]],
-        ['n2ovmr',  [[0. and n2o * 1.e-6 for n2o in climt_inputs['n2o']]]],
+        ['ch4vmr',  [[ch4 * 1.e-6 for ch4 in climt_inputs['ch4']]]],
+        ['n2ovmr',  [[n2o * 1.e-6 for n2o in climt_inputs['n2o']]]],
         ['o2vmr',  [climt_inputs['o2']]],
-        ['cfc11vmr',  [[0. and cfc11 * 1.e-6 for cfc11 in climt_inputs['cfc11']]]],
-        ['cfc12vmr',  [[0. and cfc12 * 1.e-6 for cfc12 in climt_inputs['cfc12']]]],
-        ['cfc22vmr',  [[0. and cfc22 * 1.e-6 for cfc22 in climt_inputs['cfc22']]]],
+        ['cfc11vmr',  [[cfc11 * 1.e-6 for cfc11 in climt_inputs['cfc11']]]],
+        ['cfc12vmr',  [[cfc12 * 1.e-6 for cfc12 in climt_inputs['cfc12']]]],
+        ['cfc22vmr',  [[cfc22 * 1.e-6 for cfc22 in climt_inputs['cfc22']]]],
         ['ccl4vmr',  [climt_inputs['ccl4']]],
         # SURFACE OPTICAL PROPERTIES
         # SW
