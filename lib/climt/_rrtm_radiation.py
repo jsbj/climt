@@ -67,7 +67,7 @@ def driver(*args):
 
     number_of_layers = len(climt_inputs['T'])
     
-    if not climt_inputs['Tbound'].any(): climt_inputs['Tbound'] = climt_inputs['T']
+    if climt_inputs['Tbound'] == None: climt_inputs['Tbound'] = climt_inputs['T']
     
     climt_inputs['pbound'] = climt_inputs['lev'].tolist() + climt_inputs['ps'][0].tolist()
     climt_inputs['Tbound'] = [T[0][0] for T in climt_inputs['Tbound']] + [climt_inputs['Ts'][0][0]]
@@ -86,7 +86,7 @@ def driver(*args):
     
     # import pdb; pdb.set_trace()
     
-    if 'h2o' in climt_inputs and climt_inputs['h2o'].any():
+    if 'h2o' in climt_inputs and not (climt_inputs['h2o'] == None):
         h2o_concentration = [[h2o[0][0] for h2o in climt_inputs['h2o']]]
     else:
         h2o_concentration = [[(((q/1000.)/(1. - (q/1000.)))*1.607793)[0][0] for q in climt_inputs['q']]]

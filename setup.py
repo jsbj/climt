@@ -6,7 +6,7 @@ from numpy.distutils import fcompiler
 from distutils.dep_util import newer
 
 ## -------- set these
-KM = 32
+KM = 26
 JM = 1
 IM = 1
 NC_INC = '/usr/local/include'

@@ -11,7 +11,6 @@ import climt
 ioff()
 r = climt.radiation()
 
-
 globalTs = 299.7
 globalT = [
 293.7,
@@ -50,43 +49,6 @@ globalT = [
 
 
 globalT.reverse()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def getModtranOlrVsCo2():
   co2 = array([280.*2.**i for i in arange(-1,12)])
@@ -249,60 +211,7 @@ if __name__ == "__main__":
   # fig_left.semilogx(co2[:-1],abs(olr[1:]-olr[:-1]),'g-s')
   # fig_right.semilogx(co2,olr,'g-s')
   
-  co2,olr = getOlrVsCo2(scheme='rrtm',profile=profile)
-  # import pdb; pdb.set_trace()
-  # fig_left.semilogx(co2[:-1],abs(olr[1:]-olr[:-1]),'g-o')
-  # fig_right.semilogx(co2,olr,'g-o')
-  r = climt.radiation(scheme = 'rrtm')
-  olr = []
-  for c in co2:
-      r(Ts = 400, T = 400 * (r['p']/1000.) ** (2/7.), co2 = c)
-      olr.append(r['LwToa'])
-  olr = array(olr)
-  fig_left.semilogx(co2[:-1],abs(olr[1:]-olr[:-1]),'g-s')
-  fig_right.semilogx(co2,abs(olr),'g-s')
-  z = climt.radiation(scheme = 'cam3')
-  olr = []
-  for c in co2:
-      c = array(c)
-      print(c)
-      z(Ts = 400, T = 400 * (z['p']/1000.) ** (2/7.), co2 = c)
-      olr.append(z['LwToa'])
-  olr = array(olr)
-  fig_left.semilogx(co2[:-1],abs(olr[1:]-olr[:-1]),'r-s')
-  fig_right.semilogx(co2,abs(olr),'r-s')
-  print(str(globalT))
-  print(str(globalTs))
 
-  # 
-  # co2,olr = getOlrVsCo2(scheme='cam3',profile=profile)
-  # # import pdb; pdb.set_trace()
-  # fig_left.semilogx(co2[:-1],abs(olr[1:]-olr[:-1]),'b-o')
-  # fig_right.semilogx(co2,olr,'b-o')
-  # # co2,olr = getOlrVsCo2(scheme='cam3',profile=profile,isothermal_stratosphere=True)
-  # # fig_left.semilogx(co2[:-1],abs(olr[1:]-olr[:-1]),'b-s')
-  # # fig_right.semilogx(co2,olr,'b-s')
-  # 
-  # co2,olr = getOlrVsCo2(scheme='chou',profile=profile)
-  # fig_left.semilogx(co2[:-1],abs(olr[1:]-olr[:-1]),'r-o')
-  # fig_right.semilogx(co2,olr,'r-o')
-  # 
-  # # co2,olr = getOlrVsCo2(scheme='chou',profile=profile,isothermal_stratosphere=True)
-  # # fig_left.semilogx(co2[:-1],abs(olr[1:]-olr[:-1]),'r-s')
-  # # fig_right.semilogx(co2,olr,'r-s')
-  # 
-  # 
-  # #semilogx(co2[:-1],getIPCC(co2,form=1),'y-o')
-  # # semilogx(co2[:-1],getIPCC(co2,form=2),'y-s')
-  # #semilogx(co2[:-1],getIPCC(co2,form=3),'y-^')
-  # 
-  # #co2,olr = getOlrVsCo2(scheme='pytran',profile=profile)
-  # #semilogx(co2[:-1],abs(olr[1:]-olr[:-1]),'g-o')
-  # 
-  # co2,olr = getModtranOlrVsCo2()
-  # fig_left.semilogx(co2[:-1],abs(olr[1:]-olr[:-1]),'k-o')
-  # fig_right.semilogx(co2,olr,'k-o')
-  
   
   
   fig.show()
