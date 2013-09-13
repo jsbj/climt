@@ -21,32 +21,32 @@ class Component:
 
         # Initialize I/O
         self.Io = IO(self, **kwargs)
-
+        
         # Get values from restart file, if available
         if 'RestartFile' in kwargs:
             ParamNames = Parameters().value.keys()
             FieldNames = self.Required
             kwargs = self.Io.readRestart(FieldNames, ParamNames, kwargs)
-
+        
         # Initialize scalar parameters
         self.Params  = Parameters(**kwargs)
-
+        
         # Frequency with which compute() will be executed
         if 'UpdateFreq' in kwargs:
             self.UpdateFreq = kwargs.pop('UpdateFreq')
         else:
             self.UpdateFreq = self.Params['dt']
-
+        
         # Initialize State
         self.State = State(self, **kwargs)
         self.Grid = self.State.Grid
-
+        
         # Dictionary to hold increments on prognos fields
         self.Inc = {}
-
+        
         # Initialize diagnostics
         self.compute(ForcedCompute=True)
-
+        
         # Create output file
         self.Io.createOutputFile(self.State, self.Params.value)
         
@@ -55,10 +55,10 @@ class Component:
             
         # Initialize plotting facilities
         self.Plot = Plot()
-
+        
         # Initialize runtime monitor
         self.Monitor = Monitor(self,**kwargs)
-
+        
         # Notify user of unused input quantities
         self._checkUnused(kwargs)
                 
