@@ -218,8 +218,7 @@ def driver(*args):
                                         r_2.reverse()
     # import pdb; pdb.set_trace()
     output = _rrtm_radiation_fortran.driver(*[pair[1] for pair in rrtm_inputs])
-
-    # 
+    
     new_output = (
         [i for i in reversed(output[0][0])], # swuflx
         [i for i in reversed(output[1][0])], # swdflx

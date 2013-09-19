@@ -56,7 +56,7 @@ kwargs['RestartFile']     = 'restart.nc'
 #kwargs['T'] = zeros(nlev) + (kwargs['solin']/2./stebol)**0.25
 
 # -- Instantiate components and federation
-rad = climt.radiation(UpdateFreq=kwargs['dt']*50, scheme='rrtm')
+rad = climt.radiation(UpdateFreq=kwargs['dt']*50, scheme='cam3')
 con = climt.convection(scheme='emanuel')
 dif = climt.turbulence()
 oce = climt.ocean()
