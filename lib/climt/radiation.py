@@ -203,6 +203,6 @@ class radiation(Component):
             # 'LwToaCf', #    LW cloud forc, top of atmos     W m-2   
             # 'LwSrfCf' #    LW cloud forc, surface          W m-2
         ]
-        self.Required       = [field for field in _rrtm_radiation.INPUTS if field not in ['co2', 'n2o', 'ch4', 'cfc11', 'cfc12', 'cfc22', 'scon', 'o2', 'ccl4', 'tauaer_sw', 'ssaaer_sw', 'asmaer_sw', 'tauaer_lw', 'lw_surface_emissivity', 'Cpd']]#['T','q','p','ps','solin','Ts']
+        self.Required       = [field for field in _rrtm_radiation.INPUTS if field not in ['co2', 'n2o', 'ch4', 'cfc11', 'cfc12', 'cfc22', 'scon', 'o2', 'ccl4', 'tauaer_sw', 'ssaaer_sw', 'asmaer_sw', 'tauaer_lw', 'lw_surface_emissivity', 'Cpd', 'do_lw', 'do_sw']]#['T','q','p','ps','solin','Ts']
         self.Prognostic     = [] #'T']
         self.Diagnostic     = [] #'TdotRad','SrfRadFlx','lwhr','lwflx','lwup','lwdown','lwtau']

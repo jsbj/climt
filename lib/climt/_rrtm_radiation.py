@@ -3,8 +3,8 @@ from math import cos, pi
 import _rrtm_radiation_fortran
 from numpy import ndarray
 INPUTS = [
-            # 'do_sw', #     0  Shortwave switch     (integer)       1   1 / 0 => do / do not compute SW        
-            # 'do_lw', #     0  Longwave switch      (integer)       1   1 / 0 => do / do not compute LW       
+            'do_sw', #     0  Shortwave switch     (integer)       1   1 / 0 => do / do not compute SW        
+            'do_lw', #     0  Longwave switch      (integer)       1   1 / 0 => do / do not compute LW       
             'p', #       1-3  Atmospheric pressure     mb               Default is equispaced 0-ps. p[0] is top level
             'lev',
             'T', #       1-3  Temperature              K        283.15  Isothermal
@@ -103,6 +103,8 @@ def driver(*args):
     
     rrtm_inputs = [
         # GENERAL, used in both SW and LW
+        ['do_sw', climt_inputs['do_sw']],
+        ['do_lw', climt_inputs['do_lw']],
         ['icld', 1 if 'cldf' in climt_inputs else 0], # Cloud overlap method, 0: Clear only, 1: Random, 2,  Maximum/random] 3: Maximum
         ['permuteseed_sw',  150], # used for monte carlo clouds; must differ from permuteseed_lw by number of subcolumns
         ['permuteseed_lw',  300], # learn about these later...
@@ -228,4 +230,5 @@ def driver(*args):
         output[1][0][-1] - output[0][0][-1], # swToA
         output[7][0][-1] - output[6][0][-1] # lwToA
     )
+    
     return new_output

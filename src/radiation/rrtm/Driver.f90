@@ -1,6 +1,6 @@
 ! see _rrtm_radiation for the python that prepares these arguments...
 subroutine driver &
-    (nbndlw, nbndsw, naerec, ncol, nlay, icld, &
+    (nbndlw, nbndsw, naerec, ncol, nlay, do_sw, do_lw, icld, &
     permuteseed_sw, permuteseed_lw, irng, idrv, cpdair, play, plev, &
     tlay, tlev, tsfc, h2ovmr, o3vmr, co2vmr, ch4vmr, n2ovmr, &
     o2vmr, cfc11vmr, cfc12vmr, cfc22vmr, ccl4vmr, aldif, aldir, asdif, &
@@ -27,6 +27,8 @@ subroutine driver &
 !     integer(kind=im), intent(in) :: iplon
     integer(kind=im), intent(in) :: ncol
     integer(kind=im), intent(in) :: nlay
+    integer(kind=im), intent(in) :: do_sw
+    integer(kind=im), intent(in) :: do_lw
     integer(kind=im), intent(inout) :: icld
     integer(kind=im), intent(in) :: permuteseed_sw
     integer(kind=im), intent(in) :: permuteseed_lw
@@ -95,7 +97,6 @@ subroutine driver &
     real(kind=rb), intent(out) :: uflxc(ncol,nlay+1)        ! Clear sky longwave upward flux (W/m2)
     real(kind=rb), intent(out) :: dflxc(ncol,nlay+1)        ! Clear sky longwave downward flux (W/m2)
     real(kind=rb), intent(out) :: hrc(ncol,nlay)          ! Clear sky longwave radiative heating rate (K/d)
-
     real(kind=rb), intent(out) :: duflx_dt(ncol,nlay+1)
     real(kind=rb), intent(out) :: duflxc_dt(ncol,nlay+1)
 
@@ -116,33 +117,38 @@ subroutine driver &
     real(kind=rb) :: reicmcl_lw(ncol,nlay)
     real(kind=rb) :: relqmcl_lw(ncol,nlay)
 
-    call mcica_subcol_sw(1, ncol, nlay, icld, permuteseed_sw, irng, play, &
-                       cldfrac, ciwp, clwp, reic, relq, tauc_sw, ssac_sw, asmc_sw, fsfc_sw, &
-                       cldfmcl_sw, ciwpmcl_sw, clwpmcl_sw, reicmcl_sw, relqmcl_sw, &
-                       taucmcl_sw, ssacmcl_sw, asmcmcl_sw, fsfcmcl_sw)
-    call mcica_subcol_lw(1, ncol, nlay, icld, permuteseed_lw, irng, play, &
-                       cldfrac, ciwp, clwp, reic, relq, tauc_lw, cldfmcl_lw, &
-                       ciwpmcl_lw, clwpmcl_lw, reicmcl_lw, relqmcl_lw, taucmcl_lw)
-    call rrtmg_sw_ini(cpdair)
-    call rrtmg_lw_ini(cpdair)
-    call rrtmg_sw(ncol    ,nlay    ,icld    , &
-             play    ,plev    ,tlay    ,tlev    ,tsfc   , &
-             h2ovmr , o3vmr   ,co2vmr  ,ch4vmr  ,n2ovmr ,o2vmr , &
-             asdir   ,asdif   ,aldir   ,aldif   , &
-             coszen  ,adjes   ,dyofyr  ,scon    , &
-             inflgsw ,iceflgsw,liqflgsw,cldfmcl_sw , &
-             taucmcl_sw ,ssacmcl_sw ,asmcmcl_sw ,fsfcmcl_sw , &
-             ciwpmcl_sw ,clwpmcl_sw ,reicmcl_sw ,relqmcl_sw , &
-             tauaer_sw  ,ssaaer_sw ,asmaer_sw  ,ecaer_sw   , &
-             swuflx  ,swdflx  ,swhr    ,swuflxc ,swdflxc ,swhrc)
-    call rrtmg_lw(ncol    ,nlay    ,icld    ,idrv    , &
-             play    ,plev    ,tlay    ,tlev    ,tsfc    , & 
-             h2ovmr  ,o3vmr   ,co2vmr  ,ch4vmr  ,n2ovmr  ,o2vmr , &
-             cfc11vmr,cfc12vmr,cfc22vmr,ccl4vmr ,emis    , &
-             inflglw ,iceflglw,liqflglw,cldfmcl_lw , &
-             taucmcl_lw ,ciwpmcl_lw ,clwpmcl_lw ,reicmcl_lw ,relqmcl_lw , &
-             tauaer_lw  , &
-             uflx    ,dflx    ,hr      ,uflxc   ,dflxc,  hrc, &
-             duflx_dt,duflxc_dt )
+    if (do_sw == 1) then
+        call mcica_subcol_sw(1, ncol, nlay, icld, permuteseed_sw, irng, play, &
+                           cldfrac, ciwp, clwp, reic, relq, tauc_sw, ssac_sw, asmc_sw, fsfc_sw, &
+                           cldfmcl_sw, ciwpmcl_sw, clwpmcl_sw, reicmcl_sw, relqmcl_sw, &
+                           taucmcl_sw, ssacmcl_sw, asmcmcl_sw, fsfcmcl_sw)
+        call rrtmg_sw_ini(cpdair)
+        call rrtmg_sw(ncol    ,nlay    ,icld    , &
+                 play    ,plev    ,tlay    ,tlev    ,tsfc   , &
+                 h2ovmr , o3vmr   ,co2vmr  ,ch4vmr  ,n2ovmr ,o2vmr , &
+                 asdir   ,asdif   ,aldir   ,aldif   , &
+                 coszen  ,adjes   ,dyofyr  ,scon    , &
+                 inflgsw ,iceflgsw,liqflgsw,cldfmcl_sw , &
+                 taucmcl_sw ,ssacmcl_sw ,asmcmcl_sw ,fsfcmcl_sw , &
+                 ciwpmcl_sw ,clwpmcl_sw ,reicmcl_sw ,relqmcl_sw , &
+                 tauaer_sw  ,ssaaer_sw ,asmaer_sw  ,ecaer_sw   , &
+                 swuflx  ,swdflx  ,swhr    ,swuflxc ,swdflxc ,swhrc)
+    end if
+    
+    if (do_lw == 1) then
+        call mcica_subcol_lw(1, ncol, nlay, icld, permuteseed_lw, irng, play, &
+                           cldfrac, ciwp, clwp, reic, relq, tauc_lw, cldfmcl_lw, &
+                           ciwpmcl_lw, clwpmcl_lw, reicmcl_lw, relqmcl_lw, taucmcl_lw)
+        call rrtmg_lw_ini(cpdair)
+        call rrtmg_lw(ncol    ,nlay    ,icld    ,idrv    , &
+                 play    ,plev    ,tlay    ,tlev    ,tsfc    , & 
+                 h2ovmr  ,o3vmr   ,co2vmr  ,ch4vmr  ,n2ovmr  ,o2vmr , &
+                 cfc11vmr,cfc12vmr,cfc22vmr,ccl4vmr ,emis    , &
+                 inflglw ,iceflglw,liqflglw,cldfmcl_lw , &
+                 taucmcl_lw ,ciwpmcl_lw ,clwpmcl_lw ,reicmcl_lw ,relqmcl_lw , &
+                 tauaer_lw  , &
+                 uflx    ,dflx    ,hr      ,uflxc   ,dflxc,  hrc, &
+                 duflx_dt,duflxc_dt )
+    end if
 
 end subroutine driver
