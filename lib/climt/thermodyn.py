@@ -9,7 +9,7 @@ from parameters import Parameters
 try:
     import _thermodyn
 except ImportError:
-    print "Thermodynamics components are currently unavailable."
+    import sys; sys.stderr.write("Thermodynamics components are currently unavailable.")
 
 
 def es(T):

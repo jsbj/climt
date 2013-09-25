@@ -51,8 +51,8 @@ Extensions = [
 #     'dir':'src/radiation/greygas'},
 #    {'name':'ozone',
 #     'dir':'src/radiation/ozone'},
-#    {'name':'insolation',
-#     'dir':'src/radiation/insolation'},
+    {'name':'insolation',
+     'dir':'src/radiation/insolation'},
 #    {'name':'ccm3_turbulence',
 #     'dir':'src/turbulence/ccm3',
 #     'cppflags':'-DPLON=%i -DPLEV=%i' % (IM,KM)},
@@ -128,65 +128,104 @@ def buildNeeded(target,src):
 
 def build_ext(name=None, dir=None, cppflags='', f77flags='', f90flags='', \
               lib='', libdir='', incdir=''):
-    #Builds an extension
-    os.system('rm -rf tmp; mkdir tmp')
-    src = getSources(dir)
-    target = '_%s.so' % name
-    driver = glob.glob(os.path.join(dir,'Driver.f*'))[0]
-    f77flags = '-c %s %s' % (cppflags,f77flags)
-    f90flags = '-c -fPIC -fno-range-check %s %s' % (cppflags,f90flags)
-    if buildNeeded(target,src):
-        print '\n Building %s ... \n' % os.path.basename(target)
-        for filename in src:
-            os.system('cp %s tmp/' % filename)
-        f77src = [filename.split('/')[-1] for filename in src if filename[-2:] in ['.f', '.F']]
-        f90src = [filename.split('/')[-1] for filename in src if filename[-4:] in ['.f90', '.F90']]
-        if len(f77src) > 0:
-            f77command = 'cd tmp;' + ' '.join((compiler, f77flags, ' '.join(f77src)))
-            print f77command
-            os.system(f77command)
-            
-        if len(f90src) > 0:
-            f90command = 'cd tmp;' + ' '.join((compiler, f90flags, ' '.join(f90src)))
-            print f90command
-            os.system(f90command)
-        os.system('cp .f2py_f2cmap tmp/')    
-        os.system('cd tmp; f2py -m _%s -h _%s.pyf --overwrite-signature %s' % (name,name,driver.split('/')[-1]))
-        os.system('cd tmp; f2py -c --fcompiler=gnu95 _%s.pyf --build-dir .  *.o' % (name))
-        os.system('cd tmp; gcc -pthread -shared ./src.linux-x86_64-2.6/_rrtm_radiation_fortranmodule.o ./src.linux-x86_64-2.6/fortranobject.o Driver.o mcica_random_numbers.o mcica_subcol_gen_lw.o mcica_subcol_gen_sw.o parkind.o parrrsw.o parrrtm.o rrlw_cld.o rrlw_con.o rrlw_kg01.o rrlw_kg02.o rrlw_kg03.o rrlw_kg04.o rrlw_kg05.o rrlw_kg06.o rrlw_kg07.o rrlw_kg08.o rrlw_kg09.o rrlw_kg10.o rrlw_kg11.o rrlw_kg12.o rrlw_kg13.o rrlw_kg14.o rrlw_kg15.o rrlw_kg16.o rrlw_ncpar.o rrlw_ref.o rrlw_tbl.o rrlw_vsn.o rrlw_wvn.o rrsw_aer.o rrsw_cld.o rrsw_con.o rrsw_kg16.o rrsw_kg17.o rrsw_kg18.o rrsw_kg19.o rrsw_kg20.o rrsw_kg21.o rrsw_kg22.o rrsw_kg23.o rrsw_kg24.o rrsw_kg25.o rrsw_kg26.o rrsw_kg27.o rrsw_kg28.o rrsw_kg29.o rrsw_ncpar.o rrsw_ref.o rrsw_tbl.o rrsw_vsn.o rrsw_wvn.o rrtmg_lw_cldprmc.o rrtmg_lw_init.o rrtmg_lw_k_g.o rrtmg_lw_rad.o rrtmg_lw_rtrnmc.o rrtmg_lw_setcoef.o rrtmg_lw_taumol.o rrtmg_sw_cldprmc.o rrtmg_sw_init.o rrtmg_sw_k_g.o rrtmg_sw_rad.o rrtmg_sw_reftra.o rrtmg_sw_setcoef.o rrtmg_sw_spcvmc.o rrtmg_sw_taumol.o rrtmg_sw_vrtqdr.o -L/usr/lib64 -lpython2.6 -lgfortran -o ./_rrtm_radiation_fortran.so')
-        os.system('mv tmp/_%s.so lib/climt' % name)
-        os.system('rm -rf tmp')
-        # # generate signature file
-        # os.system('f2py --overwrite-signature %s -m _%s -h _%s.pyf'%(driver,name,name))
-        # # compile extension
-        # F2pyCommand = []
-        # F2pyCommand.append('f2py -c -m _%s' % name)
-        # F2pyCommand.append('--fcompiler=%s' % compiler)
-        # F2pyCommand.append('-I%s' % dir)
-        # F2pyCommand.append('-I%s' % os.path.join(dir,'include'))
-        # F2pyCommand.append('-I%s' % os.path.join(dir,'src'))
-        # F2pyCommand.append('-I%s' % os.path.join(dir,'src','include'))
-        # if incdir is not '':
-        #     for i in incdir:
-        #         F2pyCommand.append('-I%s' % i)
-        # if libdir is not '':
-        #     for i in libdir:
-        #         F2pyCommand.append('-L%s' % i)
-        # if lib is not '':
-        #     for i in lib:
-        #         F2pyCommand.append('-l%s' % i)
-        # F2pyCommand.append('--f77flags=%s' % f77flags)
-        # F2pyCommand.append('--f90flags=%s' % f90flags)
-        # F2pyCommand.append('_%s.pyf' % name)
-        # F2pyCommand.append('%s' % string.join(src))
-        # F2pyCommand = string.join(F2pyCommand)
-        # print F2pyCommand
-        # import pdb;pdb.set_trace()
-        # if os.system(F2pyCommand) > 0:
-        #     print '+++ Compilation failed'
-        #     sys.exit()
-        # os.system('mv -f _%s.so lib/climt' % name)
-        # os.system('rm -f _%s.pyf' % name)
+    if name == 'rrtm_radiation_fortran':
+	    #Builds an extension
+	    os.system('rm -rf tmp; mkdir tmp')
+	    src = getSources(dir)
+	    target = '_%s.so' % name
+	    driver = glob.glob(os.path.join(dir,'Driver.f*'))[0]
+	    f77flags = '-c %s %s' % (cppflags,f77flags)
+	    f90flags = '-c -fPIC -fno-range-check %s %s' % (cppflags,f90flags)
+	    if buildNeeded(target,src):
+		print '\n Building %s ... \n' % os.path.basename(target)
+		for filename in src:
+		    os.system('cp %s tmp/' % filename)
+		f77src = [filename.split('/')[-1] for filename in src if filename[-2:] in ['.f', '.F']]
+		f90src = [filename.split('/')[-1] for filename in src if filename[-4:] in ['.f90', '.F90']]
+		if len(f77src) > 0:
+		    f77command = 'cd tmp;' + ' '.join((compiler, f77flags, ' '.join(f77src)))
+		    print f77command
+		    os.system(f77command)
+		    
+		if len(f90src) > 0:
+		    f90command = 'cd tmp;' + ' '.join((compiler, f90flags, ' '.join(f90src)))
+		    print f90command
+		    os.system(f90command)
+		os.system('cp .f2py_f2cmap tmp/')    
+		os.system('cd tmp; f2py -m _%s -h _%s.pyf --overwrite-signature %s' % (name,name,driver.split('/')[-1]))
+		os.system('cd tmp; f2py -c --fcompiler=gnu95 _%s.pyf --build-dir .  *.o' % (name))
+		os.system('cd tmp; gcc -pthread -shared ./src.linux-x86_64-2.6/_rrtm_radiation_fortranmodule.o ./src.linux-x86_64-2.6/fortranobject.o Driver.o mcica_random_numbers.o mcica_subcol_gen_lw.o mcica_subcol_gen_sw.o parkind.o parrrsw.o parrrtm.o rrlw_cld.o rrlw_con.o rrlw_kg01.o rrlw_kg02.o rrlw_kg03.o rrlw_kg04.o rrlw_kg05.o rrlw_kg06.o rrlw_kg07.o rrlw_kg08.o rrlw_kg09.o rrlw_kg10.o rrlw_kg11.o rrlw_kg12.o rrlw_kg13.o rrlw_kg14.o rrlw_kg15.o rrlw_kg16.o rrlw_ncpar.o rrlw_ref.o rrlw_tbl.o rrlw_vsn.o rrlw_wvn.o rrsw_aer.o rrsw_cld.o rrsw_con.o rrsw_kg16.o rrsw_kg17.o rrsw_kg18.o rrsw_kg19.o rrsw_kg20.o rrsw_kg21.o rrsw_kg22.o rrsw_kg23.o rrsw_kg24.o rrsw_kg25.o rrsw_kg26.o rrsw_kg27.o rrsw_kg28.o rrsw_kg29.o rrsw_ncpar.o rrsw_ref.o rrsw_tbl.o rrsw_vsn.o rrsw_wvn.o rrtmg_lw_cldprmc.o rrtmg_lw_init.o rrtmg_lw_k_g.o rrtmg_lw_rad.o rrtmg_lw_rtrnmc.o rrtmg_lw_setcoef.o rrtmg_lw_taumol.o rrtmg_sw_cldprmc.o rrtmg_sw_init.o rrtmg_sw_k_g.o rrtmg_sw_rad.o rrtmg_sw_reftra.o rrtmg_sw_setcoef.o rrtmg_sw_spcvmc.o rrtmg_sw_taumol.o rrtmg_sw_vrtqdr.o -L/usr/lib64 -lpython2.6 -lgfortran -o ./_rrtm_radiation_fortran.so')
+		os.system('mv tmp/_%s.so lib/climt' % name)
+		os.system('rm -rf tmp')
+		# # generate signature file
+		# os.system('f2py --overwrite-signature %s -m _%s -h _%s.pyf'%(driver,name,name))
+		# # compile extension
+		# F2pyCommand = []
+		# F2pyCommand.append('f2py -c -m _%s' % name)
+		# F2pyCommand.append('--fcompiler=%s' % compiler)
+		# F2pyCommand.append('-I%s' % dir)
+		# F2pyCommand.append('-I%s' % os.path.join(dir,'include'))
+		# F2pyCommand.append('-I%s' % os.path.join(dir,'src'))
+		# F2pyCommand.append('-I%s' % os.path.join(dir,'src','include'))
+		# if incdir is not '':
+		#     for i in incdir:
+		#         F2pyCommand.append('-I%s' % i)
+		# if libdir is not '':
+		#     for i in libdir:
+		#         F2pyCommand.append('-L%s' % i)
+		# if lib is not '':
+		#     for i in lib:
+		#         F2pyCommand.append('-l%s' % i)
+		# F2pyCommand.append('--f77flags=%s' % f77flags)
+		# F2pyCommand.append('--f90flags=%s' % f90flags)
+		# F2pyCommand.append('_%s.pyf' % name)
+		# F2pyCommand.append('%s' % string.join(src))
+		# F2pyCommand = string.join(F2pyCommand)
+		# print F2pyCommand
+		# import pdb;pdb.set_trace()
+		# if os.system(F2pyCommand) > 0:
+		#     print '+++ Compilation failed'
+		#     sys.exit()
+		# os.system('mv -f _%s.so lib/climt' % name)
+		# os.system('rm -f _%s.pyf' % name)
+    else:
+            src = getSources(dir)
+            target = '_%s.so' % name
+	    driver = glob.glob(os.path.join(dir,'Driver.f*'))[0]
+	    f77flags = '"%s %s"' % (cppflags,f77flags)
+	    f90flags = '"%s %s"' % (cppflags,f90flags)
+	    if buildNeeded(target,src):
+		print '\n Building %s ... \n' % os.path.basename(target)
+		# generate signature file
+		os.system('f2py --overwrite-signature %s -m _%s -h _%s.pyf'%(driver,name,name))
+		# compile extension
+		F2pyCommand = []
+		F2pyCommand.append('f2py -c -m _%s' % name)
+		F2pyCommand.append('--fcompiler=%s' % compiler)
+		F2pyCommand.append('-I%s' % dir)
+		F2pyCommand.append('-I%s' % os.path.join(dir,'include'))
+		F2pyCommand.append('-I%s' % os.path.join(dir,'src'))
+		F2pyCommand.append('-I%s' % os.path.join(dir,'src','include'))
+		if incdir is not '':
+		    for i in incdir:
+			F2pyCommand.append('-I%s' % i)
+		if libdir is not '':
+		    for i in libdir:
+			F2pyCommand.append('-L%s' % i)
+		if lib is not '':
+		    for i in lib:
+			F2pyCommand.append('-l%s' % i)
+		F2pyCommand.append('--f77flags=%s' % f77flags)
+		F2pyCommand.append('--f90flags=%s' % f90flags)
+		F2pyCommand.append('_%s.pyf' % name)
+		F2pyCommand.append('%s' % string.join(src))
+		F2pyCommand = string.join(F2pyCommand)
+		print F2pyCommand
+		if os.system(F2pyCommand) > 0:
+		    print '+++ Compilation failed'
+		    sys.exit()
+		os.system('mv -f _%s.so lib/climt' % name)
+		os.system('rm -f _%s.pyf' % name)
 
 def setupClimt():
     # Build all extensions
