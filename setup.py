@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 import os,glob,string,sys
-from numpy.distutils.core  import setup, Extension
+from numpy.distutils.core import setup, Extension
 from numpy.distutils import fcompiler
 from distutils.dep_util import newer
 
 ## -------- set these
-KM = 26 
+KM = 26
 JM = 1
 IM = 1
 NC_INC = '/usr/local/include'
@@ -235,23 +235,23 @@ def setupClimt():
     # note: setup() cannot copy directories, and falls over
     # trying to copy the CVS directory in climt/lib/data
     # workaround: make data list which specifically excludes CVS
-    # os.chdir('lib/climt')
-    # DataFiles = []
-    # for File in glob.glob('data/*/*'):
-    #     if 'CVS' not in File:
-    #         DataFiles.append(File)
-    # print DataFiles
-    # os.chdir('../..')
+    os.chdir('lib/climt')
+    DataFiles = []
+    for File in glob.glob('data/*/*'):
+        if 'CVS' not in File:
+            DataFiles.append(File)
+    print DataFiles
+    os.chdir('../..')
     
-    #setup(name         = "CliMT",
-    #      version      = open('Version').read()[:-1],
-    #      description  = "Climate modelling and diagnostics toolkit",
-    #      author       = "Rodrigo Caballero",
-    #      author_email = "rodrigo@misu.su.se",
-    #      url          = "http://people.su.se/~rcaba/climt",
-    #      packages    = ['climt'],
-    #      package_dir = {'':'lib'},
-    #      package_data = {'climt':['*.so']+DataFiles})
+    setup(name = "CliMT",
+          version = open('Version').read()[:-1],
+          description = "Climate modelling and diagnostics toolkit",
+          author = "Rodrigo Caballero",
+          author_email = "rodrigo@misu.su.se",
+          url = "http://people.su.se/~rcaba/climt",
+          packages = ['climt'],
+          package_dir = {'':'lib'},
+          package_data = {'climt':['*.so']+DataFiles})
 
 
 def setupClimtLite():

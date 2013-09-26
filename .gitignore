@@ -12,5 +12,5 @@ Thumbs.db
 *.exe
 *.o
 *.so
-build/
 *.pyc
+build/
