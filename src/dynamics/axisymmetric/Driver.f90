@@ -13,7 +13,10 @@ real(8), intent(in)                       :: Rd, Cpd, a, omega, delh
 real(8), intent(in)                       :: delv, Newt, dt
 real(8), intent(in),  dimension(jm)       :: lat
 real(8), intent(in),  dimension(km)       :: lev
+<<<<<<< HEAD
 !real(8), intent(in),  dimension(km,jm,im) :: T_, U_, V_, q_, Vold_
+=======
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 real(8), intent(in),  dimension(km,jm,im) :: T_, U_, q_, Vold_
 
 real(8),  dimension(km,jm,im) :: V_

@@ -61,7 +61,11 @@
 
 ! Set values of some inputs
       ! interface pressures
+<<<<<<< HEAD
       ph(1)=0.5*p(1)
+=======
+      ph(1)=1.e-9
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
       do k=2,km
        ph(k)=0.5*( p(k-1)+p(k) )
       enddo                     

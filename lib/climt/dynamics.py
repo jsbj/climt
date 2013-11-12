@@ -2,6 +2,7 @@
 
 from component  import Component
 from numpy import *
+import string
 
 class dynamics(Component):
     """
@@ -39,8 +40,9 @@ class dynamics(Component):
     """
     def __init__(self, scheme = 'axisymmetric', **kwargs):
         # Initialize scheme-dependent attributes
-        if scheme == 'axisymmetric': self.__axisymmetric_dynamics__init__()
-        else: raise ValueError,'\n \n ++++ CliMT.dynamics: Scheme %s unknown' % scheme
+        if scheme not in ['axisymmetric','two_column']:
+            raise ValueError,'\n \n ++++ CliMT.dynamics: Scheme %s unknown' % scheme
+        exec('self.__%s_dynamics__init__()' % string.lower(scheme))
         # Initialize fields etc. 
         Component.__init__(self, **kwargs)
         
@@ -51,7 +53,7 @@ class dynamics(Component):
           '\n \n ++++ CliMT.dynamics: Could not load axisymmetric scheme'
         # Define some attributes
         self.Name           = 'axisymmetric_dynamics'
-        self.LevType       = 'p'
+        self.LevType        = 'p'
         self.Extension      = _axisymmetric_dynamics
         self.driver         = _axisymmetric_dynamics.driver
         self.SteppingScheme = 'semi-implicit'
@@ -62,3 +64,20 @@ class dynamics(Component):
         self.Required       = ['T','U','V','q']
         self.Prognostic     = ['T','U','V','q']
         self.Diagnostic     = ['V','psi','theta','Te','W','TdotDyn','UdotDyn','VdotDyn','qdotDyn']
+
+    def __two_column_dynamics__init__(self):
+        # Load extension
+        try: import _two_column_dynamics
+        except: raise ImportError, \
+          '\n \n ++++ CliMT.dynamics: Could not load two-column scheme'
+        # Define some attributes
+        self.Name           = 'two_column_dynamics'
+        self.LevType       = 'p'
+        self.Extension      = _two_column_dynamics
+        self.driver         = _two_column_dynamics.driver
+        self.SteppingScheme = 'explicit'
+        self.ToExtension    = ['dt','Rd','Rv','Cpd','Cpv','g','p','z0','V','T','q']
+        self.FromExtension  = ['Vinc','Tinc','qinc','z0inc','W']
+        self.Required       = ['p','z0','V','T','q']
+        self.Prognostic     = ['V','T','q','z0']
+        self.Diagnostic     = ['W']

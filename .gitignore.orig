@@ -1,0 +1,24 @@
+<<<<<<< HEAD
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+build/
+*.pyc
+=======
+*.so
+*.pyc
+*.pyf
+build
+*~
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840

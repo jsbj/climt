@@ -152,16 +152,23 @@ class federation(Component):
         """
         Update federation's diagnostics and increments.
         """
-        New = self.State.Old.copy()
+        ## New = self.State.Old.copy()
+        ## for component in self.components:            
+        ##     # enforce time-splitting of implicit and semi-implicit components
+        ##     self.State.Old.update(New)            
+        ##     # bring component's diagnostics and increments up to date
+        ##     component.compute(ForcedCompute=ForcedCompute)
+        ##     # accumulate increments
+        ##     for key in component.Inc:
+        ##         New[key] += component.Inc[key]
+        ## for key in self.State.Old:
+        ##     self.Inc[key] = New[key]  - self.State.Old[key]
+
+        self.Inc = self.State.Old.copy()
+        for key in self.Inc: self.Inc[key] = self.Inc[key]*0.
         for component in self.components:            
-            # enforce time-splitting of implicit and semi-implicit components
-            self.State.Old.update(New)
-            
             # bring component's diagnostics and increments up to date
             component.compute(ForcedCompute=ForcedCompute)
-
             # accumulate increments
-            for key in component.Inc: New[key] += component.Inc[key]
-
-        for key in self.State.Old:
-            self.Inc[key] = New[key] - self.State.Old[key]
+            for key in component.Inc:
+                self.Inc[key] += component.Inc[key]

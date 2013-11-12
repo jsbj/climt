@@ -1,12 +1,20 @@
 #!/usr/bin/env python
 
 import os,glob,string,sys
+<<<<<<< HEAD
 from numpy.distutils.core  import setup, Extension
+=======
+from numpy.distutils.core import setup, Extension
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 from numpy.distutils import fcompiler
 from distutils.dep_util import newer
 
 ## -------- set these
+<<<<<<< HEAD
 KM = 26
+=======
+KM = 32
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 JM = 1
 IM = 1
 NC_INC = '/usr/local/include'
@@ -31,9 +39,17 @@ Extensions = [
     {'name':'hard_adjustment',
      'dir':'src/convection/hard'},
     {'name':'sbm_convection',
+<<<<<<< HEAD
      'dir':'src/convection/hard'},
     {'name':'axisymmetric_dynamics',
      'dir':'src/dynamics/axisymmetric'},
+=======
+     'dir':'src/convection/sbm'},
+    {'name':'axisymmetric_dynamics',
+     'dir':'src/dynamics/axisymmetric'},
+    {'name':'two_column_dynamics',
+     'dir':'src/dynamics/two_column'},
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
     {'name':'slab_ocean',
      'dir':'src/ocean/slab_ocean'},
     {'name':'ccm3_radiation',
@@ -57,7 +73,13 @@ Extensions = [
      'dir':'src/turbulence/ccm3',
      'cppflags':'-DPLON=%i -DPLEV=%i' % (IM,KM)},
     {'name':'simple_turbulence',
+<<<<<<< HEAD
      'dir':'src/turbulence/simple'}
+=======
+     'dir':'src/turbulence/simple'},
+    {'name':'rrtm_radiation_fortran',
+     'dir':'src/radiation/rrtm'}
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
     ]
 
 # define extensions that will be built when the --lite option is used
@@ -78,7 +100,11 @@ print 'Using %s compiler' % compiler
 # set some fortran compiler-dependent flags
 if compiler == 'gnu95':
     f77flags='-ffixed-line-length-132 -fdefault-real-8'
+<<<<<<< HEAD
     f90flags='-fdefault-real-8'
+=======
+    f90flags='-fdefault-real-8 -fno-range-check -ffree-form'
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 elif compiler == 'intel' or compiler == 'intelem':
     f77flags='-132 -r8 -w95 -w90 -mp'
     f90flags='-r8 -w95 -mp'
@@ -107,9 +133,17 @@ def getSources(dir):
         Sources = [os.path.join(dir,s[:-1]) for s in Sources]
     else:
         Sources = []
+<<<<<<< HEAD
         for pattern in ['*.f','*.F','*.f90','*.F90']:
             Sources += glob.glob(os.path.join(dir,pattern))
             Sources += glob.glob(os.path.join(dir,'src',pattern))        
+=======
+        w = os.walk(dir)
+        for ww in w:
+            if 'ignore' not in ww[0]:
+                for pattern in ['*.f','*.F','*.f90','*.F90']:
+                    Sources += glob.glob(os.path.join(ww[0],pattern))
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
     return Sources
 
 def buildNeeded(target,src):
@@ -128,6 +162,11 @@ def build_ext(name=None, dir=None, cppflags='', f77flags='', f90flags='', \
     #Builds an extension
     src = getSources(dir)
     target = '_%s.so' % name
+<<<<<<< HEAD
+=======
+    print dir
+    print glob.glob(os.path.join(dir,'Driver.f*'))
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
     driver = glob.glob(os.path.join(dir,'Driver.f*'))[0]
     f77flags = '"%s %s"' % (cppflags,f77flags)
     f90flags = '"%s %s"' % (cppflags,f90flags)
@@ -138,7 +177,11 @@ def build_ext(name=None, dir=None, cppflags='', f77flags='', f90flags='', \
         # compile extension
         F2pyCommand = []
         F2pyCommand.append('f2py -c -m _%s' % name)
+<<<<<<< HEAD
         F2pyCommand.append('--fcompiler=%s' % compiler)
+=======
+        F2pyCommand.append('--fcompiler=%s --noopt' % compiler)
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
         F2pyCommand.append('-I%s' % dir)
         F2pyCommand.append('-I%s' % os.path.join(dir,'include'))
         F2pyCommand.append('-I%s' % os.path.join(dir,'src'))
@@ -165,6 +208,10 @@ def build_ext(name=None, dir=None, cppflags='', f77flags='', f90flags='', \
         os.system('rm -f _%s.pyf' % name)
 
 def setupClimt():
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
     # Build all extensions
     for ext in Extensions: build_ext(**ext)
 
@@ -179,6 +226,7 @@ def setupClimt():
             DataFiles.append(File)
     print DataFiles
     os.chdir('../..')
+<<<<<<< HEAD
 
     setup(name         = "CliMT",
           version      = open('Version').read()[:-1],
@@ -187,6 +235,16 @@ def setupClimt():
           author_email = "rodrigo@misu.su.se",
           url          = "http://people.su.se/~rcaba/climt",
           packages    = ['climt'],
+=======
+    
+    setup(name = "CliMT",
+          version = open('Version').read()[:-1],
+          description = "Climate modelling and diagnostics toolkit",
+          author = "Rodrigo Caballero",
+          author_email = "rodrigo@misu.su.se",
+          url = "http://people.su.se/~rcaba/climt",
+          packages = ['climt'],
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
           package_dir = {'':'lib'},
           package_data = {'climt':['*.so']+DataFiles})
 

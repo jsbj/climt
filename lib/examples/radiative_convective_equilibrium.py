@@ -38,7 +38,11 @@ kwargs['MonitorFreq']    = kwargs['dt']*50 #60*60*6.
 # exists, it will be overwritten. If OutputFile is not given,
 # no output will be written to file. Output will be written every
 # OutputFreq seconds
+<<<<<<< HEAD
 kwargs['OutputFile']     = 'radconv1.nc'
+=======
+kwargs['OutputFile']     = 'radconv.nc'
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 kwargs['OutputFreq']     = 86400.*10.
 
 # Initial conditions can be specified in 2 ways:
@@ -47,6 +51,7 @@ kwargs['OutputFreq']     = 86400.*10.
 #    the model will initialize from the last time step in the file.
 #    If RestartFile and OutputFile are the same, then output will be
 #    appended to the restart file (ie. a continuation run).
+<<<<<<< HEAD
 kwargs['RestartFile']     = 'restart.nc'
 # 2) If RestartFile is not given, then initial values for prognostic
 #    fields must be explicitly given, e.g.
@@ -57,6 +62,18 @@ kwargs['RestartFile']     = 'restart.nc'
 
 # -- Instantiate components and federation
 rad = climt.radiation(UpdateFreq=kwargs['dt']*50, scheme='rrtm')
+=======
+#kwargs['RestartFile']     = 'restart.nc'
+# 2) If RestartFile is not given, then initial values for prognostic
+#    fields must be explicitly given, e.g.
+nlev = climt.get_nlev()
+stebol = climt.Parameters()['stebol']
+kwargs['q'] = zeros(nlev) + 1.e-9
+kwargs['T'] = zeros(nlev) + (kwargs['solin']/2./stebol)**0.25
+
+# -- Instantiate components and federation
+rad = climt.radiation(UpdateFreq=kwargs['dt']*50, scheme='cam3')
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 con = climt.convection(scheme='emanuel')
 dif = climt.turbulence()
 oce = climt.ocean()
@@ -72,7 +89,11 @@ for i in range(NSteps):
     #fed.State['q']=zeros(rad.nlev)+1.e-9
     # The following code adds a uniform 1 K/day cooling rate to 
     # the internally-computed tendencies
+<<<<<<< HEAD
     dT= -1./86400.*kwargs['dt']*ones(rad.nlev)
+=======
+    dT= array([[-1./86400.*kwargs['dt']*2.*ones(rad.nlev)]]).transpose()
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
     fed.step(Inc={'T':dT})
     printout(fed)
 

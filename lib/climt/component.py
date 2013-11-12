@@ -10,7 +10,11 @@ from _grid      import get_nlev, get_nlat, get_nlon
 
 class Component:
     """
+<<<<<<< HEAD
     Abstract class defininig methods inherited by all CliMT components.
+=======
+    Abstract class defining methods inherited by all CliMT components.
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
     """
     def __init__(self, **kwargs):
 
@@ -99,7 +103,12 @@ class Component:
         else:                            Output = dict( zip(self.FromExtension, OutputValues ) )
 
         # Extract increments from Output
+<<<<<<< HEAD
         for key in self.Prognostic: self.Inc[key] = Output.pop(key+'inc')
+=======
+        for key in self.Prognostic:
+            self.Inc[key] = Output.pop(key+'inc')
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 
         # Remove increments of Fixed variables
         for key in self.Fixed:
@@ -131,10 +140,17 @@ class Component:
         for i in range(NSteps):
             # Add external increments
             for key in Inc.keys():
+<<<<<<< HEAD
                 try:
                     self.Inc[key] += Inc[key]
                 except:
                     self.Inc.update(Inc)
+=======
+                if key in self.Inc.keys():
+                    self.Inc[key] += Inc[key]
+                else:
+                    self.Inc[key] = Inc[key]
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
             
             # Avance prognostics 1 time step
             self.State.advance(self)

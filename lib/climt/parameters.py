@@ -73,6 +73,16 @@ class Parameters:
         self.append('cfc11',   1.e-9, 'ppmv',   'CFC11 conc.' )
         self.append('cfc12',   1.e-9, 'ppmv',   'CFC12 conc.' )
         self.append('cfc22',   1.e-9, 'ppmv',   'CFC22 conc.' ) 
+<<<<<<< HEAD
+=======
+        self.append('o2', .2095, '-', 'O2 volumetric mixing ratio')
+        self.append('ccl4', 0., '-', 'volume mixing ratio')
+        self.append('tauaer_sw', 0., '-', 'Aerosol optical depth')
+        self.append('ssaaer_sw', 0., '-', 'Aerosol single scattering albedo')
+        self.append('asmaer_sw', 0., '-', 'Aerosol asymmetry parameter')
+        self.append('tauaer_lw', 0., '-', 'Aerosol optical depth')
+        self.append('lw_surface_emissivity', 1., '-', 'lw surface emissivity')
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
         self.append('tauvis',  0.,    '-',      'Aerosol opt. depth, CCM3 scheme' )    
         self.append('tau_inf', 1.,    '-',      'Total optical depth, greygas scheme')
         self.append('alpha_greygas', 1., '-',    'tau profile shape parameter, greygas scheme' )

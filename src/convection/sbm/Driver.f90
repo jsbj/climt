@@ -4,6 +4,11 @@ subroutine driver(km, jm, im, &
      tau_bm, es0, T00, rhbm, Mv, Ma, &
      Tinc, qinc, precc, TdotConv, qdotConv, theta )
 
+<<<<<<< HEAD
+=======
+implicit none
+
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 integer km,jm,im
 !f2py,intent(in,hide) km,jm,im
 real(8),intent(in) :: Lv, Cpd, g, Rd, Rv, Cpv, rowl, dt
@@ -54,7 +59,11 @@ t_ref1 = T00/(1. - Rv*T00/Lv*log(p1/es0))
 do k=1,km
 do j=1,jm
 do i=1,im
+<<<<<<< HEAD
    call escomp(hlv, Ra, es0, T00, t_ref1(i,j,k), es1(i,j,k))
+=======
+   call escomp(Lv, Rv, es0, T00, t_ref1(i,j,k), es1(i,j,k))
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 enddo
 enddo
 enddo

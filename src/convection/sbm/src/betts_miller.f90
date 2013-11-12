@@ -64,7 +64,11 @@
 !--------------------- interface arguments -----------------------------
 
    real   , intent(in) , dimension(im,jm,km) :: tin, qin, pfull, phalf
+<<<<<<< HEAD
    real   , intent(in)                    :: dt, ps, es0, T00
+=======
+   real   , intent(in)                    :: dt, ps, es0, T00, kappa
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
    real   , intent(out), dimension(im,jm)   :: rain, bmflag, klzbs, cape, &
        cin, invtau_bm_t, invtau_bm_q, capeflag
    real   , intent(out), dimension(im,jm,km) :: tdel, qdel, q_ref, t_ref

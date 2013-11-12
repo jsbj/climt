@@ -112,7 +112,11 @@ class IO:
             
         # Read elapsed time
         if 'ElapsedTime' not in kwargs:
+<<<<<<< HEAD
             kwargs['ElapsedTime'] = File.variables['time'][len(File.variables['time'])-1]*86400.
+=======
+            kwargs['ElapsedTime'] = File.variables['time'][-1]*86400.
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 
        # Read parameters (they are stored as global attribs)
         for Name in ParamNames:

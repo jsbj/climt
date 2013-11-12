@@ -57,8 +57,13 @@ subroutine crm(  &
      lw_toa,  &
      lw_srf,  &
      sw_toa,  &
+<<<<<<< HEAD
      sw_srf & 
      )
+=======
+     sw_srf, & 
+     lwup,lwdn)
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 
 
   use shr_kind_mod,        only: r8 => shr_kind_r8
@@ -111,6 +116,11 @@ subroutine crm(  &
   real(r8), intent(out) ::  qrl(pver)
   real(r8), intent(out) ::  swflx(pverp)
   real(r8), intent(out) ::  lwflx(pverp)
+<<<<<<< HEAD
+=======
+  real(r8), intent(out) ::  lwup(pverp)
+  real(r8), intent(out) ::  lwdn(pverp)
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
   real(r8), intent(out) ::  sw_cf_toa
   real(r8), intent(out) ::  sw_cf_srf
   real(r8), intent(out) ::  lw_cf_toa
@@ -204,6 +214,10 @@ subroutine crm(  &
   ncol = 1
   rel = r_liq
   rei = r_ice
+<<<<<<< HEAD
+=======
+  pstd = 1.01325e5 
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
   if (flus == -99.) then
      lwupcgs = stebol*tg**4 * 1.e3
   else
@@ -228,6 +242,7 @@ subroutine crm(  &
      end if
   enddo
  ! -- define interface pressures and convert units
+<<<<<<< HEAD
   pstd = 1000.*100. ! mb -> Pa
   pmid = p*100.  ! mb -> Pa
   if (dp(1) == -99.) then
@@ -241,6 +256,15 @@ subroutine crm(  &
            pint(k)=pstd
         endif
      enddo
+=======
+  pmid = p * 100. ! mb -> Pa
+  if (dp(1) == -99.) then
+     pint(1)=1.e-9 
+     do k=2,pver
+        pint(k)=0.5*(pmid(k-1)+pmid(k))
+     enddo
+     pint(pverp) = ps*100. ! mb -> Pa
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
   else
      pint(1:pver) = pmid - dp*100./2.
      pint(pverp) = pmid(pver) + dp(pver)*100./2.
@@ -343,8 +367,16 @@ subroutine crm(  &
           cfc11, cfc12, cldf, emis, pmxrgn,    &
           nmxrgn, qrl, flns, flnt, flnsc,     &
           flntc, flwds, flut, flutc, aerosol(:,1), &
+<<<<<<< HEAD
           lwflx, fcnl)
      lwflx=-lwflx*1.e-3 ! CGS->MKS for output; change sign to give +ve downwards
+=======
+          lwflx, fcnl,lwup,lwdn)
+     ! CGS->MKS for output; change sign to give +ve downwards
+     lwflx=-lwflx*1.e-3 
+     lwup = -lwup*1.e-3
+     lwdn = lwdn*1.e-3
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
      qrl = qrl*1.e-3
      lw_cf_srf = -(flns(1) - flnsc(1))*1.e-3
      lw_cf_toa = -(flnt(1) - flntc(1))*1.e-3

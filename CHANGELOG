@@ -1,7 +1,27 @@
+<<<<<<< HEAD
 08-02-2013 +++ Version 0.6.14
           Added Cam3Feedbacks.py to CliMT/lib/examples
 11-10-2012
           Added 1-level sea ice module written by Ray Pierrehumbert
+=======
+15-10-2013 Added 2 column dynamics module
+
+10-10-2013 Changed the federation.compute method, which was causing instabilities in
+	   some cases.
+
+	   Added a clean.py utility for cleaning up compiled files
+
+18-09-2013 Changed calculation of interface level pressures in CAM3 and CCM3 so as to
+	   enforce that top-of-model is at p=0, which ensures that LwToa is truly the OLR.
+
+14-09-2013 Removed all makefiles (no longer needed), added clean.py to clean up in src 
+	   directory
+
+08-02-2013 +++ Version 0.6.14
+	   Added Cam3Feedbacks.py to CliMT/lib/examples
+
+11-10-2012 Added 1-level sea ice module written by Ray Pierrehumbert
+>>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 
 3-2-2012 +++ Version 0.6.9
 	 Unified CliMT and CliMT_lite by adding --lite option to setup.py,
