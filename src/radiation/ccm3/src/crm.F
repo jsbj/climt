@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-c     $Header: /Users/rca/cvsroot/CliMT/src/radiation/ccm3/src/crm.F,v 1.12 2009/04/16 18:18:53 rca Exp $
-=======
 c     $Header: /Users/rca/cvsroot/CliMT/src/radiation/ccm3/src/crm.F,v 1.13 2013/10/15 08:09:14 rca Exp $
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 
 c     CCM3 Column Radiation Model 
 c     Jeffrey Kiehl, Bruce Briegleb, and Charlie Zender  
@@ -1012,11 +1008,7 @@ c     Convert pressures from mb to pascals and define interface pressures:
       enddo                  !          end loop over lev
       do k=1,plevp
          if(k.eq.1) then
-<<<<<<< HEAD
-            pintm1(i,k)=pmidm1(i,k)/2.0 ! Pa
-=======
             pintm1(i,k)=1.e-9 ! Pa
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
          else if (k.gt.1.and.k.le.plev) then
             pintm1(i,k)=0.5*(pmidm1(i,k-1)+pmidm1(i,k)) ! Pa
          else if (k.eq.plevp) then

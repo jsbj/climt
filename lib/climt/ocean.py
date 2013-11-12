@@ -43,15 +43,9 @@ class ocean(Component):
         self.Extension      = _slab_ocean
         self.driver         = _slab_ocean.driver
         self.SteppingScheme = 'explicit'
-<<<<<<< HEAD
-        self.ToExtension    = ['SrfRadFlx', 'SrfLatFlx', 'SrfSenFlx', 'Hslab', 'rowl', 'Csw', 'dt']
-        self.FromExtension  = ['Tsinc','Tsdot']
-        self.Required       = ['Ts', 'SrfRadFlx', 'SrfLatFlx', 'SrfSenFlx']
-=======
         self.ToExtension    = ['SrfRadFlx', 'SrfLatFlx', 'SrfSenFlx', 'Qflx', 'Hslab', 'rowl', 'Csw', 'dt']
         self.FromExtension  = ['Tsinc','Tsdot']
         self.Required       = ['Ts', 'SrfRadFlx', 'SrfLatFlx', 'SrfSenFlx', 'Qflx']
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
         self.Prognostic     = ['Ts']
         self.Diagnostic     = []
 

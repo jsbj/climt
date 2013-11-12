@@ -20,15 +20,6 @@ MinLat        = -90.
 MaxLat        = 90.
 MinLev        = 0.
 MaxLev        = 1000.
-<<<<<<< HEAD
-Ndays         = 20.  # Total length of run (days)
-
-kwargs={}
-kwargs['Newt']            = 20.
-kwargs['nuv']             = 0.5
-kwargs['Pr']              = 100.
-kwargs['dt']              = 60.*20.
-=======
 Ndays         = 200.  # Total length of run (days)
 
 kwargs={}
@@ -36,7 +27,6 @@ kwargs['Newt']            = 20.
 kwargs['nuv']             = 0.05
 kwargs['Pr']              = 1.
 kwargs['dt']              = 60.*5.
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 #kwargs['RestartFile']     = 'held_hou.nc'
 kwargs['OutputFile']      = 'held_hou.nc'
 kwargs['OutputFreq']      = 86400. * 5.

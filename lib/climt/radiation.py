@@ -7,22 +7,14 @@ from component  import Component
 class radiation(Component):
     """
     Interface to atmospheric radiation schemes.
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
     * Instantiation:
     
       x=climt.radiation( <args> )
       
       where <args> are the following OPTIONAL arguments:
       Name   Dims  Meaning              Units     Default   Notes
-<<<<<<< HEAD
-      scheme    0  Radiative scheme     (string)    'cam3'  Choices are: 'cam3', 'ccm3', 'chou', 'greygas' 
-=======
       scheme    0  Radiative scheme     (string)    'cam3'  Choices are: 'cam3', 'ccm3', 'chou', 'greygas', 'rrtm' 
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
       do_sw     0  Shortwave switch     (integer)       1   1 / 0 => do / do not compute SW        
       do_lw     0  Longwave switch      (integer)       1   1 / 0 => do / do not compute LW       
       scon      0  Solar constant       W m-2        1367.
@@ -62,15 +54,9 @@ class radiation(Component):
                                                              
     * Usage:
       Call instance directly to compute radiative fluxes and heating rates:
-<<<<<<< HEAD
-
-      x( <args> )
-
-=======
       
       x( <args> )
       
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
       where <args> are as above.
         
     * Output (accessible as x['swhr'] etc.):
@@ -94,11 +80,7 @@ class radiation(Component):
     def __init__(self, scheme = 'ccm3', **kwargs):
         # Initialize scheme-dependent attributes
         if scheme in ['gray','grey','graygas']: scheme='greygas'
-<<<<<<< HEAD
-        if scheme not in ['greygas','chou','ccm3','cam3']:
-=======
         if scheme not in ['greygas','chou','ccm3','cam3', 'rrtm']:
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
             raise ValueError,'\n \n ++++ CliMT.radiation: Scheme %s unknown' % scheme
         exec('self.__%s__init__()' % string.lower(scheme))
 
@@ -146,20 +128,12 @@ class radiation(Component):
                                'co2','n2o','ch4','cfc11','cfc12','g','Cpd',
                                'epsilon','stebol','dt']
         self.FromExtension  = ['Tinc','TdotRad','SrfRadFlx','swhr','lwhr','swflx','lwflx','SwToaCf',
-<<<<<<< HEAD
-                               'SwSrfCf','LwToaCf','LwSrfCf','LwToa','LwSrf','SwToa','SwSrf']
-=======
                                'SwSrfCf','LwToaCf','LwSrfCf','LwToa','LwSrf','SwToa','SwSrf','lwuflx','lwdflx']
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
         self.Required       = ['p','dp','ps','T','Ts','q','o3','cldf','clwp','ciwp','r_liq','r_ice',
                                'aldif','aldir','asdif','asdir','zen','solin','flus']
         self.Prognostic     = ['T']
         self.Diagnostic     = ['TdotRad','SrfRadFlx','swhr','lwhr','swflx','lwflx','SwToaCf',
-<<<<<<< HEAD
-                               'SwSrfCf','LwToaCf','LwSrfCf','LwToa','LwSrf','SwToa','SwSrf']
-=======
                                'SwSrfCf','LwToaCf','LwSrfCf','LwToa','LwSrf','SwToa','SwSrf','lwuflx','lwdflx']
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 
     def __chou__init__(self):
         # Load extension
@@ -193,12 +167,6 @@ class radiation(Component):
         self.driver         = _greygas_radiation.driver
         self.SteppingScheme = 'explicit'
         self.ToExtension    = ['beta_greygas','stebol','g','dt','Cpd','tau_inf','alpha_greygas','T','q','p','ps','solin','Ts']
-<<<<<<< HEAD
-        self.FromExtension  = ['Tinc','TdotRad','SrfRadFlx','swhr','swflx','lwhr','lwflx','lwup','lwdown','lwtau']
-        self.Required       = ['T','q','p','ps','solin','Ts']
-        self.Prognostic     = ['T']
-        self.Diagnostic     = ['TdotRad','SrfRadFlx','lwhr','lwflx','lwup','lwdown','lwtau']
-=======
         self.FromExtension  = ['Tinc','TdotRad','SrfRadFlx','swhr','swflx','lwhr','lwflx','lwuflx','lwdflx','lwtau']
         self.Required       = ['T','q','p','ps','solin','Ts']
         self.Prognostic     = ['T']
@@ -221,4 +189,3 @@ class radiation(Component):
                           'tauaer_sw', 'ssaaer_sw', 'asmaer_sw', 'tauaer_lw', 'lw_surface_emissivity','Cpd']]
         self.Prognostic = [] 
         self.Diagnostic = [] 
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840

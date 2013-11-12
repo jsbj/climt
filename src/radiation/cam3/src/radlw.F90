@@ -38,14 +38,10 @@ subroutine radclwmx(lchnk   ,ncol    ,doabsems                  , &
                     cld     ,emis    ,pmxrgn  ,nmxrgn  ,qrl     , &
                     flns    ,flnt    ,flnsc   ,flntc   ,flwds   , &
                     flut    ,flutc   , &
-<<<<<<< HEAD
-                    aer_mass,fnl     ,fcnl)
-=======
                     aer_mass,fnl     ,fcnl, &
 !+++CliMT
                     ful,fdl) 
 !---CliMT
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 !----------------------------------------------------------------------- 
 ! 
 ! Purpose: 

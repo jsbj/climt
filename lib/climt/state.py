@@ -1,70 +1,7 @@
 # Master dictionary containing all field identifiers known to CliMT
 # with corresponding long names, units and nominal rank
 
-<<<<<<< HEAD
-KnownFields = {}
-KnownFields['ps']        = ['surface pressure',              'mb', '2D']
-KnownFields['Ts']        = ['surface temperature',            'K', '2D']
-KnownFields['hIce']      = ['sea ice thickness',              'm', '2D']
-KnownFields['zen']       = ['solar zenith angle',           'deg', '2D']
-KnownFields['solin']     = ['insolation',                 'W m-2', '2D']
-KnownFields['flus']      = ['surface upwelling LW',       'W m-2', '2D']
-KnownFields['asdif']     = ['diffuse SW albedo',              '-', '2D']
-KnownFields['asdir']     = ['direct SW albedo',               '-', '2D']
-KnownFields['aldif']     = ['diffuse LW albedo',              '-', '2D']
-KnownFields['aldir']     = ['diffuse LW albedo',              '-', '2D']
-KnownFields['SrfSenFlx'] = ['surface sensible heat flux', 'W m-2', '2D']
-KnownFields['SrfLatFlx'] = ['surface latent heat flux',   'W m-2', '2D']
-KnownFields['taux']      = ['surface zonal windstress',      'Pa', '2D']
-KnownFields['tauy']      = ['surface merid windstress',      'Pa', '2D']
-KnownFields['SrfRadFlx'] = ['net surface radiative flux', 'W m-2', '2D']
-KnownFields['SwToa']     = ['net top-of-atmos SW flux', 'W m-2', '2D']
-KnownFields['LwToa']     = ['net top-of-atmos LW flux', 'W m-2', '2D']
-KnownFields['SwSrf']     = ['net surface SW flux',      'W m-2', '2D']
-KnownFields['LwSrf']     = ['net surface LW flux',      'W m-2', '2D']
-KnownFields['SwToaCf']   = ['top-of-atmos SW cloud forc', 'W m-2', '2D']
-KnownFields['LwToaCf']   = ['top-of-atmos LW cloud forc', 'W m-2', '2D']
-KnownFields['SwSrfCf']   = ['surface SW cloud forc',      'W m-2', '2D']
-KnownFields['LwSrfCf']   = ['surface LW cloud forc',      'W m-2', '2D']
-KnownFields['cbmf']      = ['cloud base mass flux',      'kg s-1', '2D']
-KnownFields['precc']     = ['convective precip rate',  'mm day-1', '2D']
-KnownFields['Tsdot']     = ['surface heating rate',       'K s-1', '2D']
 
-KnownFields['p']         = ['atmospheric pressure',            'mb', '3D']
-KnownFields['dp']        = ['level thickness',                 'mb', '3D']
-KnownFields['T']         = ['atmospheric temperature',          'K', '3D']
-KnownFields['theta']     = ['potential temperature',            'K', '3D']
-KnownFields['Te']        = ['target temp, Newt. cooling',       'K', '3D']
-KnownFields['q']         = ['specific humidity',           'g kg-1', '3D']
-KnownFields['U']         = ['zonal wind',                   'm s-1', '3D']
-KnownFields['V']         = ['meridional wind',              'm s-1', '3D']
-KnownFields['W']         = ['pressure velocity',            'Pa s-', '3D']
-KnownFields['psi']       = ['streamfunction',                'm Pa s-1', '3D']
-KnownFields['cldf']      = ['cloud fraction',                   '-', '3D']
-KnownFields['ciwp']      = ['cloud ice water path',      'g m-2', '3D']
-KnownFields['clwp']      = ['cloud liquid water path',      'g m-2', '3D']
-KnownFields['r_liq']     = ['Effective radius, liquid drop','micron', '3D']
-KnownFields['r_ice']     = ['Effective radius, ice drop','micron', '3D']
-KnownFields['o3']        = ['ozone mass mix. ratio',      'kg kg-1', '3D']
-KnownFields['swflx']     = ['SW radiative flux',            'W m-2', '3D']
-KnownFields['lwflx']     = ['LW radiative flux',            'W m-2', '3D']
-KnownFields['lwup']      = ['upward LW radiative flux',     'W m-2', '3D']
-KnownFields['lwdown']    = ['downward LW radiative flux',     'W m-2', '3D']
-KnownFields['swhr']      = ['SW heating rate',            'K day-1', '3D']
-KnownFields['lwhr']      = ['LW heating rate',            'K day-1', '3D']
-KnownFields['lwtau']     = ['Broadband LW optical depth',       '-', '3D']
-KnownFields['TdotDyn']   = ['dynamical heating rate',     'K day-1', '3D']
-KnownFields['TdotRad']   = ['net radiative heating rate', 'K day-1', '3D']
-KnownFields['TdotTurb']  = ['turbulent heating rate',     'K day-1', '3D']
-KnownFields['TdotConv']  = ['convective heating rate',    'K day-1', '3D']
-KnownFields['qdotDyn']   = ['dynamical moistening rate', 'g kg-1 day-1', '3D']
-KnownFields['qdotTurb']  = ['turbulent moistening rate', 'g kg-1 day-1', '3D']
-KnownFields['qdotConv']  = ['convective moistening rate','g kg-1 day-1', '3D']
-KnownFields['UdotDyn']   = ['dynamical zonal accn',       'm s-1 day-1', '3D']
-KnownFields['UdotTurb']  = ['turbulent zonal drag',       'm s-1 day-', '3D']
-KnownFields['VdotDyn']   = ['dynamical merid accn',       'm s-1 day-1', '3D']
-KnownFields['VdotTurb']  = ['turbulent merid drag',       'm s-1 day-1', '3D']
-=======
 KnownFields = {
     'ps':         ['surface pressure',              'mb', '2D'],
     'Ts':         ['surface temperature',            'K', '2D'],
@@ -137,7 +74,6 @@ KnownFields = {
     'lev': ['pressure at upper edge of layer', 'mb', '3D'],
     'h2o': ['alternative to specific humidity; H2O concentration','concentration','3D']
 }
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 
 import os
 from numpy import *
@@ -205,10 +141,7 @@ class State:
         # Set fields' values to input or default
         Shape3D = self.Grid.Shape3D
         Shape2D = Shape3D[1:]
-<<<<<<< HEAD
-=======
         
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
         for Field in FieldNames:
             exec('Shape = Shape%s' % KnownFields[Field][2])
             if Field in kwargs:
@@ -257,12 +190,9 @@ class State:
         # Surface pressure
         if 'ps' == Field: return zeros(Shape,'d') + 1000.
 
-<<<<<<< HEAD
-=======
         # Surface geopotential
         if 'z0' == Field: return zeros(Shape,'d')
 
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
         # Zonal wind
         if 'U' == Field: return zeros(Shape,'d')
 
@@ -332,10 +262,7 @@ class State:
         if 'SrfRadFlx' == Field: return zeros(Shape,'d')
         if 'SrfLatFlx' == Field: return zeros(Shape,'d')
         if 'SrfSenFlx' == Field: return zeros(Shape,'d')
-<<<<<<< HEAD
-=======
         if 'Qflx'      == Field: return zeros(Shape,'d')
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 
         # Cloud-base mass flux (required for Emanuel convection scheme)
         if 'cbmf' == Field: return zeros(Shape,'d')

@@ -48,13 +48,8 @@ subroutine driver(  &
      lw_toa,  &
      lw_srf,  &
      sw_toa,  &
-<<<<<<< HEAD
-     sw_srf & 
-     )
-=======
      sw_srf, & 
      lwup_out, lwdn_out)
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 
 ! Input
   integer, intent(in) :: km,jm,im,idosw,idolw,in_cld
@@ -96,11 +91,8 @@ subroutine driver(  &
   real*8, intent(out) :: qrl(km,jm,im)
   real*8, intent(out) :: swflx_out(km,jm,im)
   real*8, intent(out) :: lwflx_out(km,jm,im)
-<<<<<<< HEAD
-=======
   real*8, intent(out) :: lwup_out(km,jm,im)
   real*8, intent(out) :: lwdn_out(km,jm,im)
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
   real*8, intent(out) :: sw_cf_toa(jm,im)
   real*8, intent(out) :: sw_cf_srf(jm,im)
   real*8, intent(out) :: lw_cf_toa(jm,im)
@@ -114,11 +106,8 @@ subroutine driver(  &
 ! Local 
   real*8 swflx(km+1)
   real*8 lwflx(km+1)
-<<<<<<< HEAD
-=======
   real*8 lwup(km+1)
   real*8 lwdn(km+1)
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
 
   do i=1,im
      do j=1,jm
@@ -165,12 +154,6 @@ subroutine driver(  &
              lw_toa(j,i),  &
              lw_srf(j,i),  &
              sw_toa(j,i),  &
-<<<<<<< HEAD
-             sw_srf(j,i) & 
-             )
-        swflx_out(:,j,i) = (swflx(1:km)+swflx(2:km+1))/2.
-        lwflx_out(:,j,i) = (lwflx(1:km)+lwflx(2:km+1))/2.
-=======
              sw_srf(j,i), & 
              lwup,lwdn &
              )
@@ -179,7 +162,6 @@ subroutine driver(  &
         lwflx_out(:,j,i) = (lwflx(1:km)+lwflx(2:km+1))/2.
         lwup_out(:,j,i) = (lwup(1:km)+lwup(2:km+1))/2.
         lwdn_out(:,j,i) = (lwdn(1:km)+lwdn(2:km+1))/2.
->>>>>>> 1055422fefa06f7092b71f9ab4c7a66a6ba25840
         srfflx(j,i) = sw_srf(j,i) + lw_srf(j,i)
      enddo
   enddo
