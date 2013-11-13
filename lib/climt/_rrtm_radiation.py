@@ -229,8 +229,8 @@ def driver(*args):
         [i for i in reversed(output[7][0])], # lwdflx
         output[1][0][-1] - output[0][0][-1], # SwToA
         output[7][0][-1] - output[6][0][-1], # LwToA
-        [[i[r]/(SW_BANDS[r][1] - SW_BANDS[r][0]) for r in range(len(i))] for i in reversed(output[14][0])],# swdflxband
-        [[i[r]/(SW_BANDS[r][1] - SW_BANDS[r][0]) for r in range(len(i))] for i in reversed(output[15][0])],# swdflxband
+        [[i[r]/(SW_BANDS[r][1] - SW_BANDS[r][0]) for r in range(len(i))] for i in reversed(output[14][0])][1:],# swdflxband
+        [[i[r]/(SW_BANDS[r][1] - SW_BANDS[r][0]) for r in range(len(i))] for i in reversed(output[15][0])][1:],# swdflxband
         [i for i in reversed(output[16][0])],# lwuflxband
         [i for i in reversed(output[17][0])],# lwdflxband
         SW_BANDS,# swbands
