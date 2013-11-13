@@ -86,7 +86,7 @@
              taucmcl ,ciwpmcl ,clwpmcl ,reicmcl ,relqmcl , &
              tauaer  , &
              uflx    ,dflx    ,hr      ,uflxc   ,dflxc,  hrc, &
-             duflx_dt,duflxc_dt )
+             duflx_dt,duflxc_dt, uflx_band, dflx_band)
 
 ! -------- Description --------
 
@@ -311,6 +311,8 @@
                                                       ! change in clear sky upward longwave flux (w/m2/K)
                                                       ! with respect to surface temperature
                                                       !    Dimensions: (ncol,nlay+1)
+      real(kind=rb), intent(out), optional :: uflx_band(:,:,:)   
+      real(kind=rb), intent(out), optional :: dflx_band(:,:,:)   
 
 ! ----- Local -----
 
@@ -425,6 +427,8 @@
                                               ! with respect to surface temperature
       real(kind=rb) :: dtotuclfl_dt(0:nlay+1) ! change in clear sky upward longwave flux (w/m2/k)
                                               ! with respect to surface temperature
+      real(kind=rb) :: totuflux_band(0:nlay+1,nbndlw)
+      real(kind=rb) :: totdflux_band(0:nlay+1,nbndlw)
 
 !
 ! Initializations
@@ -543,7 +547,8 @@
                      pwvcm, fracs, taut, &
                      totuflux, totdflux, fnet, htr, &
                      totuclfl, totdclfl, fnetc, htrc, &
-                     idrv, dplankbnd_dt, dtotuflux_dt, dtotuclfl_dt )
+                     idrv, dplankbnd_dt, dtotuflux_dt, dtotuclfl_dt, &
+                     totuflux_band, totdflux_band )
 
 !  Transfer up and down fluxes and heating rate to output arrays.
 !  Vertical indexing goes from bottom to top; reverse here for GCM if necessary.
@@ -553,6 +558,8 @@
             dflx(iplon,k+1) = totdflux(k)
             uflxc(iplon,k+1) = totuclfl(k)
             dflxc(iplon,k+1) = totdclfl(k)
+            uflx_band(iplon,k+1,:) = totuflux_band(k,:)
+            dflx_band(iplon,k+1,:) = totdflux_band(k,:)
          enddo
          do k = 0, nlayers-1
             hr(iplon,k+1) = htr(k)

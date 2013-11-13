@@ -41,7 +41,8 @@
              fac00, fac01, fac10, fac11, &
              selffac, selffrac, indself, forfac, forfrac, indfor, &
              pbbfd, pbbfu, pbbcd, pbbcu, puvfd, puvcd, pnifd, pnicd, &
-             pbbfddir, pbbcddir, puvfddir, puvcddir, pnifddir, pnicddir)
+             pbbfddir, pbbcddir, puvfddir, puvcddir, pnifddir, pnicddir, &
+             totuflux_band, totdflux_band)
 ! ---------------------------------------------------------------------------
 !
 ! Purpose: Contains spectral loop to compute the shortwave radiative fluxes, 
@@ -191,6 +192,8 @@
       real(kind=rb), intent(out) :: pnifd(:)
       real(kind=rb), intent(out) :: pnicddir(:)
       real(kind=rb), intent(out) :: pnifddir(:)
+      real(kind=rb), intent(out) :: totuflux_band(:,:)
+      real(kind=rb), intent(out) :: totdflux_band(:,:)
 
 ! Output - inactive                                            !   All Dimensions: (nlayers+1)
 !      real(kind=rb), intent(out) :: puvcu(:)
@@ -579,6 +582,8 @@
                pbbfd(ikl) = pbbfd(ikl) + zincflx(iw)*zfd(jk,iw)
                pbbcu(ikl) = pbbcu(ikl) + zincflx(iw)*zcu(jk,iw)
                pbbcd(ikl) = pbbcd(ikl) + zincflx(iw)*zcd(jk,iw)
+               totuflux_band(ikl,ibm) = pbbfu(ikl)
+               totdflux_band(ikl,ibm) = pbbfd(ikl)
                if (idelm .eq. 0) then 
                   pbbfddir(ikl) = pbbfddir(ikl) + zincflx(iw)*ztdbt_nodel(jk)
                   pbbcddir(ikl) = pbbcddir(ikl) + zincflx(iw)*ztdbtc_nodel(jk)
@@ -609,8 +614,7 @@
                      pnifddir(ikl) = pnifddir(ikl) + zincflx(iw)*ztdbt(jk)
                      pnicddir(ikl) = pnicddir(ikl) + zincflx(iw)*ztdbtc(jk)
                   endif
-               endif
-
+               endif               
             enddo
 
 ! End loop on jg, g-point interval

@@ -87,7 +87,8 @@
              taucmcl ,ssacmcl ,asmcmcl ,fsfcmcl , &
              ciwpmcl ,clwpmcl ,reicmcl ,relqmcl , &
              tauaer  ,ssaaer  ,asmaer  ,ecaer   , &
-             swuflx  ,swdflx  ,swhr    ,swuflxc ,swdflxc ,swhrc)
+             swuflx  ,swdflx  ,swhr    ,swuflxc ,swdflxc ,swhrc, &
+             swuflx_band, swdflx_band)
 
 ! ------- Description -------
 
@@ -298,6 +299,9 @@
                                                       !    Dimensions: (ncol,nlay+1)
       real(kind=rb), intent(out) :: swhrc(:,:)        ! Clear sky shortwave radiative heating rate (K/d)
                                                       !    Dimensions: (ncol,nlay)
+      real(kind=rb), intent(out), optional :: swuflx_band(:,:,:)   
+      real(kind=rb), intent(out), optional :: swdflx_band(:,:,:)   
+
 
 ! ----- Local -----
 
@@ -449,6 +453,9 @@
       real(kind=rb) :: difdnuv(nlay+2)        ! Diffuse downward shortwave flux, UV/vis
       real(kind=rb) :: dirdnir(nlay+2)        ! Direct downward shortwave flux, near-IR
       real(kind=rb) :: difdnir(nlay+2)        ! Diffuse downward shortwave flux, near-IR
+      real(kind=rb) :: totuflux_band(0:nlay+1,nbndsw)
+      real(kind=rb) :: totdflux_band(0:nlay+1,nbndsw)
+
 
 ! Output - inactive
 !      real(kind=rb) :: zuvfu(nlay+2)         ! temporary upward UV shortwave flux (w/m2)
@@ -690,7 +697,8 @@
               fac00, fac01, fac10, fac11, &
               selffac, selffrac, indself, forfac, forfrac, indfor, &
               zbbfd, zbbfu, zbbcd, zbbcu, zuvfd, zuvcd, znifd, znicd, &
-              zbbfddir, zbbcddir, zuvfddir, zuvcddir, znifddir, znicddir)
+              zbbfddir, zbbcddir, zuvfddir, zuvcddir, znifddir, znicddir, &
+              totuflux_band, totdflux_band)
               
 ! Transfer up and down, clear and total sky fluxes to output arrays.
 ! Vertical indexing goes from bottom to top; reverse here for GCM if necessary.
@@ -701,6 +709,9 @@
             swdflx(iplon,i) = zbbfd(i)
             uvdflx(i) = zuvfd(i)
             nidflx(i) = znifd(i)
+            swuflx_band(iplon,i,:) = totuflux_band(i,:)
+            swdflx_band(iplon,i,:) = totdflux_band(i,:)
+
 !  Direct/diffuse fluxes
             dirdflux(i) = zbbfddir(i)
             difdflux(i) = swdflx(iplon,i) - dirdflux(i)

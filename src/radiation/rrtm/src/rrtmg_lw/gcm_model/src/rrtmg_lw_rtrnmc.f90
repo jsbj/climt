@@ -34,7 +34,8 @@
                         pwvcm, fracs, taut, &
                         totuflux, totdflux, fnet, htr, &
                         totuclfl, totdclfl, fnetc, htrc, &
-                        idrv, dplankbnd_dt, dtotuflux_dt, dtotuclfl_dt )
+                        idrv, dplankbnd_dt, dtotuflux_dt, dtotuclfl_dt, &
+                        totuflux_band, totdflux_band)
 !-----------------------------------------------------------------------------
 !
 !  Original version:   E. J. Mlawer, et al. RRTM_V3.0
@@ -119,6 +120,8 @@
       real(kind=rb), intent(out) :: dtotuclfl_dt(0:)  ! change in upward longwave flux (w/m2/k)
                                                       ! with respect to surface temperature
                                                       !    Dimensions: (0:nlayers)
+      real(kind=rb), intent(out) :: totuflux_band(0:,:)
+      real(kind=rb), intent(out) :: totdflux_band(0:,:)
 
 ! ----- Local -----
 ! Declarations for radiative transfer
@@ -530,6 +533,8 @@
             clrdrad(lev) = 0.0_rb
             totuclfl(lev) = totuclfl(lev) + uclfl(lev) * delwave(iband)
             totdclfl(lev) = totdclfl(lev) + dclfl(lev) * delwave(iband)
+            totuflux_band(lev,iband) = uflux(lev)
+            totdflux_band(lev,iband) = dflux(lev)
          enddo
 
 ! Calculate total change in upward flux wrt surface temperature
@@ -554,6 +559,10 @@
       totuclfl(0) = totuclfl(0) * fluxfac
       totdclfl(0) = totdclfl(0) * fluxfac
       fnetc(0) = totuclfl(0) - totdclfl(0)
+      do iband = istart, iend
+          totuflux_band(0,iband) = totuflux_band(0,iband) * fluxfac
+          totdflux_band(0,iband) = totdflux_band(0,iband) * fluxfac
+      enddo
       
 
 ! Calculate fluxes at model levels
@@ -569,6 +578,11 @@
 ! Calculate heating rates at model layers
          htr(l)=heatfac*(fnet(l)-fnet(lev))/(pz(l)-pz(lev)) 
          htrc(l)=heatfac*(fnetc(l)-fnetc(lev))/(pz(l)-pz(lev)) 
+         
+         do iband = istart, iend
+             totuflux_band(lev,iband) = totuflux_band(lev,iband) * fluxfac
+             totdflux_band(lev,iband) = totdflux_band(lev,iband) * fluxfac
+         enddo
       enddo
 
 ! Set heating rate to zero in top layer

@@ -1,27 +1,49 @@
 import climt
 import pylab as pl
 import numpy as np
+from numpy import arange
 
 pl.ioff()
 
-r=climt.radiation(scheme='cam3')
-r(co2=300., o3=r['p']*0.+1.e-9, q=r['p']*0.+1.e-9)
-print r['LwToa']+r['Ts']**4*climt.Parameters()['stebol']
-pl.plot(r['lwdflx'],r['p'])
+co2 = 0.
 
-r=climt.radiation(scheme='chou')
-r(co2=300., o3=r['p']*0.+1.e-9, q=r['p']*0.+1.e-9)
-print r['LwToa']+r['Ts']**4*climt.Parameters()['stebol']
-pl.plot(r['lwflx']-r['LwToa'],r['p'])
+#--- instantiate radiation module
+r = climt.radiation(scheme='cam3')
 
-r=climt.radiation(scheme='rrtm')
-r(co2=300., p=r['p'], lev=r['lev'], ps=r['ps'], o3=r['p']*0.+1.e-9, q=r['p']*0.+1.e-9)
-print r['LwToa']+r['Ts']**4*climt.Parameters()['stebol']
-f = r['lwdflx'][::-1]
+#--- initialise T,q
+# Surface temperature
+Ts = 273.15 + 30.                         
+# Strospheric temp
+Tst = 273.15 - 80.                         
+# Surface pressure
+ps = 1000.
+# Equispaced pressure levels
+p = ( arange(r.nlev)+ 0.5 )/r.nlev * ps
+# Return moist adiabat with 70% rel hum
+(T,q) = climt.thermodyn.moistadiabat(p, Ts, Tst, 1.)
+
+
+cam3 = climt.radiation(scheme='cam3')
+cam3(co2=co2, p=p, ps=ps, T=T, Ts=Ts, q=q)
+# pl.plot(cam3['lwdflx'], cam3['p'])
+
+chou = climt.radiation(scheme='chou')
+chou(co2=co2, p=p, ps=ps, T=T, Ts=Ts, q=q)
+# pl.plot(chou['lwflx'] - chou['LwToa'], chou['p'])
+
+rrtm = climt.radiation(scheme='rrtm')
+rrtm(co2=co2, p=p, ps=ps, T=T, Ts=Ts, q=q * 0.)
+f = rrtm['lwdflx']
 f = (f[1:]+f[:-1])/2.
-pl.plot(f,r['p'])
+# pl.plot(f,rrtm['p'])
+# 
+# pl.legend(['cam3','chou','rrtm'])
+# 
+# pl.ylim([1000,0])
+# pl.title('no CO2, H2O at 1%')
+# pl.show()
 
-pl.legend(['cam3','chou','rrtm'])
-
-pl.ylim([1000,0])
+pl.plot([(b[1]+b[0])/2. for b in rrtm['lwbands']], rrtm['lwuflxband'][0], 'b-')
+pl.plot([(b[1]+b[0])/2. for b in rrtm['lwbands']], rrtm['lwuflxband'][-1], 'r-')
+pl.title('OLR')
 pl.show()

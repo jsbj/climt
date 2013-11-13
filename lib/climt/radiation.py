@@ -174,6 +174,7 @@ class radiation(Component):
     
     def __rrtm__init__(self):
         # Load extension
+        # import pdb; pdb.set_trace()
         try: import _rrtm_radiation
         except: raise ImportError, '\n \n ++++ CliMT.radiation: Could not load rrtm scheme'
         # Define some attributes
@@ -183,9 +184,31 @@ class radiation(Component):
         self.driver = _rrtm_radiation.driver
         self.SteppingScheme = 'explicit'
         self.ToExtension = _rrtm_radiation.INPUTS
-        self.FromExtension = _rrtm_radiation.OUTPUTS
-        self.Required = [field for field in _rrtm_radiation.INPUTS if field not in \
-                         ['co2', 'n2o', 'ch4', 'cfc11', 'cfc12', 'cfc22', 'scon', 'o2', 'ccl4',
-                          'tauaer_sw', 'ssaaer_sw', 'asmaer_sw', 'tauaer_lw', 'lw_surface_emissivity','Cpd']]
-        self.Prognostic = [] 
-        self.Diagnostic = [] 
+        
+        self.FromExtension = [
+            # 'swhr', #       SW heating rate                 K day-1
+            # 'lwhr', #       LW heating rate                 K day-1
+            # 'swflx', #      Net SW radiative flux           W m-2   At grid-cell midpoints
+            # 'lwflx', #      Net LW radiative flux           W m-2   At grid-cell midpoints
+            'swuflx',
+            'swdflx',
+            'lwuflx',
+            'lwdflx',
+            'SwToa', #      Top-of-atmos SW rad flux        W m-2
+            'LwToa', #, #      Top-of-atmos LW rad flux        W m-2
+            # 'SwSrf', #      Surface  SW rad flux            W m-2
+            # 'LwSrf', #      Surface  LW rad flux            W m-2
+            # 'SwToaCf', #    SW cloud forc, top of atmos     W m-2   
+            # 'SwSrfCf', #    SW cloud forc, surface          W m-2   
+            # 'LwToaCf', #    LW cloud forc, top of atmos     W m-2   
+            # 'LwSrfCf' #    LW cloud forc, surface          W m-2
+            'swuflxband',
+            'swdflxband',
+            'lwuflxband',
+            'lwdflxband',
+            'swbands',
+            'lwbands'
+        ]
+        self.Required       = [field for field in _rrtm_radiation.INPUTS if field not in ['co2', 'n2o', 'ch4', 'cfc11', 'cfc12', 'cfc22', 'scon', 'o2', 'ccl4', 'tauaer_sw', 'ssaaer_sw', 'asmaer_sw', 'tauaer_lw', 'lw_surface_emissivity', 'Cpd', 'do_lw', 'do_sw']]#['T','q','p','ps','solin','Ts']
+        self.Prognostic     = [] #'T']
+        self.Diagnostic     = [] #'TdotRad','SrfRadFlx','lwhr','lwflx','lwup','lwdown','lwtau']
