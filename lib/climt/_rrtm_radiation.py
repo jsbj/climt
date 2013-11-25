@@ -91,8 +91,7 @@ def driver(*args):
     if 'h2o' in climt_inputs and not (climt_inputs['h2o'] == None):
         h2o_concentration = [[h2o[0][0] for h2o in climt_inputs['h2o']]]
     else:
-        amdw = 1.607793 # molecular weight ratio from RRTM
-        h2o_concentration = [[(amdw * (q*.001) / (1 + (amdw - 1) * (q * .001)))[0][0] for q in climt_inputs['q']]]
+        h2o_concentration = [[(1.e-3 * q * (461.5/287.04))[0][0] for q in climt_inputs['q']]]
     
     for key in ['tauaer_sw', 'ssaaer_sw', 'asmaer_sw', 'tauaer_lw']:
         if not climt_inputs[key]:
