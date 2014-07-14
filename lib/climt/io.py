@@ -29,7 +29,8 @@ if not gotNetCDF:
         gotNetCDF = False
 
 if gotNetCDF:
-    sys.stderr.write('Using %s interface for IO \n' % NetCDFInterface)
+    3
+    # sys.stderr.write('Using %s interface for IO \n' % NetCDFInterface)
 else:
     if not Lite: sys.stderr.write('\n ++++ CliMT: WARNING: NetCDF interface ' \
           +'could not be loaded, so no file input or output !\n')

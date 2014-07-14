@@ -12,7 +12,7 @@ INPUTS = [
             'ps', #      0-2  Surface pressure         mb       1000.
             'Ts', #      0-2  Surface temperature      K        283.15
             'q', #       1-3  Specific humidity        g/kg     1.e-5
-            'h2o',
+            # 'h2o',
             'o3', #      1-3  Ozone mass mix. rat.     kg/kg            Default obtained by interpolating a tropical data profile
             'co2', #       0  CO2                  ppmv          330.
             'ch4', #       0  CH4                  ppmv            0.
@@ -86,11 +86,11 @@ def driver(*args):
     
     # import pdb; pdb.set_trace()
     
-    if 'h2o' in climt_inputs and not (climt_inputs['h2o'] == None):
-        h2o_concentration = [[h2o[0][0] for h2o in climt_inputs['h2o']]]
-    else:
-        amdw = 1.607793 # molecular weight ratio from RRTM
-        h2o_concentration = [[(amdw * (q*.001) / (1 + (amdw - 1) * (q * .001)))[0][0] for q in climt_inputs['q']]]
+    # if 'h2o' in climt_inputs and not (climt_inputs['h2o'] == None):
+    #     h2o_concentration = [[h2o[0][0] for h2o in climt_inputs['h2o']]]
+    # else:
+    amdw = 1.607793 # molecular weight ratio from RRTM
+    h2o_concentration = [[(amdw * (q*.001) / (1 + (amdw - 1) * (q * .001)))[0][0] for q in climt_inputs['q']]]
     
     for key in ['tauaer_sw', 'ssaaer_sw', 'asmaer_sw', 'tauaer_lw']:
         if not climt_inputs[key]:
@@ -98,8 +98,6 @@ def driver(*args):
         else:
             if not hasattr(climt_inputs[key][0], '__iter__'):
                 climt_inputs[key] = [[value] * len(locals()[key[-2:].upper() + '_BANDS']) for value in climt_inputs[key]]
-    
-
     
     rrtm_inputs = [
         # GENERAL, used in both SW and LW
@@ -219,14 +217,22 @@ def driver(*args):
                                 if hasattr(r_2, '__iter__'):
                                     if len(r_2) in [number_of_layers, number_of_layers + 1]:
                                         r_2.reverse()
+    # import sys; sys.stderr.write(str(rrtm_inputs))
+    # import sys; sys.stderr.write("before")
     output = _rrtm_radiation_fortran.driver(*[pair[1] for pair in rrtm_inputs])
     
+    layers = len(output[0][0])
+    swflx = [output[1][0][-1-i] - output[0][0][-1-i] for i in range(layers)]
+    lwflx = [output[7][0][-1-i] - output[6][0][-1-i] for i in range(layers)]
     new_output = (
-        [i for i in reversed(output[0][0])], # swuflx
-        [i for i in reversed(output[1][0])], # swdflx
-        [i for i in reversed(output[6][0])], # lwuflx
-        [i for i in reversed(output[7][0])], # lwdflx
+        [.5*(swflx[i]+swflx[i+1]) for i in range(layers-1)], # swflx
+        [.5*(lwflx[i]+lwflx[i+1]) for i in range(layers-1)], # lwflx
+        [i for i in output[0][0][::-1]], # swuflx
+        [i for i in output[1][0][::-1]], # swdflx
+        [i for i in output[6][0][::-1]], # lwuflx
+        [i for i in output[7][0][::-1]], # lwdflx
         output[1][0][-1] - output[0][0][-1], # swToA
-        output[7][0][-1] - output[6][0][-1] # lwToA
+        output[7][0][-1] - output[6][0][-1], # lwToA
+        output[1][0][-1]
     )
     return new_output

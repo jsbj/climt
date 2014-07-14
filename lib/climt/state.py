@@ -68,8 +68,8 @@ KnownFields = {
     'cloud_forward_scattering_fraction': ['blah', 'blah', '3D'],
     'tauc_lw': ['blah', 'blah', '3D'],
     'Tbound': ['temperature at upper edge of layer', 'K', '3D'],
-    'lev': ['pressure at upper edge of layer', 'mb', '3D'],
-    'h2o': ['alternative to specific humidity; H2O concentration','concentration','3D']
+    'lev': ['pressure at upper edge of layer', 'mb', '3D'] #,
+    # 'h2o': ['alternative to specific humidity; H2O concentration','concentration','3D']
 }
 
 import os

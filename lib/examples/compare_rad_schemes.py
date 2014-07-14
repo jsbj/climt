@@ -14,21 +14,23 @@ ps = 1000.
 nlev = climt.get_nlev()
 p = ( arange(nlev)+ 0.5 )/nlev * ps
 # Return moist adiabat with 70% rel hum
-(T,q) = climt.thermodyn.moistadiabat(p, Ts, Tst, 1.)
+T = nlev * [Ts]
+q = nlev * [0.]
+o3 = nlev * [0.]
 
-cldf = q*0. 
-cldf[len(cldf)/3] = 0.5
+cldf = q
+# cldf[len(cldf)/3] = 0. # 0.5
 
-ciwp = q*0. 
-ciwp[len(cldf)/3] = 10.
+ciwp = q
+# ciwp[len(cldf)/3] = 10.
 
-r_liq = q*0. + 15.
+r_liq = q
 
-for scheme in ['ccm3','cam3','chou']:
-    r = climt.radiation(scheme=scheme)
-    r(p=p, ps=ps, T=T, Ts=Ts, q=q, cldf=cldf, ciwp=ciwp, r_liq=r_liq)
+for scheme in ['rrtm']:
+    r = climt.radiation(scheme=scheme, o3=o3, T=T, p=p, ps=ps, q=q, Ts=Ts, co2=400)
+    # r(p=p, ps=ps, T=T, Ts=Ts, q=q, cldf=cldf, ciwp=ciwp, r_liq=r_liq, o3 = o3)
     print '\n%s' % scheme
-    print r['SwToa'],r['LwToa'],r['SwSrf'],r['LwSrf']
-    print r['SwToaCf'],r['LwToaCf'],(r['solin']-r['SwToa'])/r['solin'],r['asdir']
+    print r['SwToa'],r['LwToa'] #,r['SwSrf'],r['LwSrf']
+    # print r['SwToaCf'],r['LwToaCf'],(r['solin']-r['SwToa'])/r['solin'],r['asdir']
 
-    print r['ciwp']
+    # print r['ciwp']

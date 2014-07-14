@@ -233,8 +233,8 @@ class Component:
         if len(unused) > 0: 
            if len(unused) == 1: suffix = 'y'
            else              : suffix = 'ies'
-           stderr.write('\n ++++ CliMT.'+self.Name+'.initialize: WARNING: Input quantit%s %s not used.\n' \
-                  % (suffix,str(list(unused))))
+           # stderr.write('\n ++++ CliMT.'+self.Name+'.initialize: WARNING: Input quantit%s %s not used.\n' \
+           #        % (suffix,str(list(unused))))
 
     def _getShape3D(self, **kwargs):
         '''

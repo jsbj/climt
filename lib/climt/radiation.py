@@ -187,14 +187,15 @@ class radiation(Component):
         self.FromExtension = [
             # 'swhr', #       SW heating rate                 K day-1
             # 'lwhr', #       LW heating rate                 K day-1
-            # 'swflx', #      Net SW radiative flux           W m-2   At grid-cell midpoints
-            # 'lwflx', #      Net LW radiative flux           W m-2   At grid-cell midpoints
+            'swflx', #      Net SW radiative flux           W m-2   At grid-cell midpoints
+            'lwflx', #      Net LW radiative flux           W m-2   At grid-cell midpoints
             'swuflx',
             'swdflx',
             'lwuflx',
             'lwdflx',
             'SwToa', #      Top-of-atmos SW rad flux        W m-2
-            'LwToa' #, #      Top-of-atmos LW rad flux        W m-2
+            'LwToa', #, #      Top-of-atmos LW rad flux        W m-2
+            'solin' # insolation
             # 'SwSrf', #      Surface  SW rad flux            W m-2
             # 'LwSrf', #      Surface  LW rad flux            W m-2
             # 'SwToaCf', #    SW cloud forc, top of atmos     W m-2   

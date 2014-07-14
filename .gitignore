@@ -13,4 +13,5 @@ Thumbs.db
 *.o
 *.so
 *.pyc
+*.pyf
 build/
